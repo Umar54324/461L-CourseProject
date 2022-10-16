@@ -10,6 +10,7 @@ def checkInItem(item, set_name, qty):    # assuming item already exists, check i
     init_avail = data["Availability"]
     col.update_one({"Item": item}, {"$set": {"Availability": init_avail+qty}})
     # update userDB HWSet item quantity
+    # check to make sure its less than capacity? is that necessary?
 
 
 def checkOutItem(item, set_name, qty):
@@ -21,9 +22,12 @@ def checkOutItem(item, set_name, qty):
     init_avail = data["Availability"]
     if init_avail - qty < 0:
         col.update_one({"Item": item}, {"$set": {"Availability": 0}})
+        return init_avail
         # update userDB HWSet quantity
+
     else:
         col.update_one({"Item": item}, {"$set": {"Availability": init_avail - qty}})
+        return 0
         # update userDB HWSet quantity
 
 
