@@ -23,7 +23,7 @@ def getHWSets(user, project):
     db = Client[user]
     col = db[project]
     list = []
-    for HWSet in col.find():
+    for HWSet in col.find({}, {"_id": 0}):
         list.append(HWSet)
     print(list)
     return list
