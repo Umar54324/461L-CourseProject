@@ -9,6 +9,35 @@ def createProject(user, project_name):
     db.create_collection(project_name)
 
 
+def getProjects(user):
+    connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
+    Client = MongoClient(connection_string)
+    db = Client[user]
+    print(db.list_collection_names())
+    return db.list_collection_names()
+
+
+def getHWSets(user, project):
+    connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
+    Client = MongoClient(connection_string)
+    db = Client[user]
+    col = db[project]
+    list = []
+    for HWSet in col.find():
+        list.append(HWSet)
+    print(list)
+    return list
+
+
+def getItemsInSet(user, project, HWSet): #return list of everything in set except _id, set name, and set type
+    connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
+    Client = MongoClient(connection_string)
+    db = Client[user]
+    col = db[project]
+    dict = col.find_one({"Set Name": HWSet}, {"_id": 0, "Set Name": 0, "Set Type": 0})
+    print(dict)
+    return dict
+
 def deleteUser(user):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
     Client = MongoClient(connection_string)
