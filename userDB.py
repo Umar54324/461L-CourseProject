@@ -1,18 +1,20 @@
 from pymongo import MongoClient
 import stockDB
 import certifi
+
 ca = certifi.where()
+
 
 def createProject(user, project_name):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
-    Client = MongoClient(connection_string, tlsCAFile =ca)
+    Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     db.create_collection(project_name)
 
 
 def getProjects(user):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
-    Client = MongoClient(connection_string, tlsCAFile =ca)
+    Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     print(db.list_collection_names())
     return db.list_collection_names()
@@ -20,7 +22,7 @@ def getProjects(user):
 
 def getHWSets(user, project):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
-    Client = MongoClient(connection_string, tlsCAFile =ca)
+    Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
     list = []
@@ -30,9 +32,9 @@ def getHWSets(user, project):
     return list
 
 
-def getItemsInSet(user, project, HWSet): #return list of everything in set except _id, set name, and set type
+def getItemsInSet(user, project, HWSet):  # return list of everything in set except _id, set name, and set type
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
-    Client = MongoClient(connection_string, tlsCAFile =ca)
+    Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
     dicti = col.find_one({"Set Name": HWSet}, {"_id": 0, "Set Name": 0})
@@ -47,20 +49,20 @@ def getItemsInSet(user, project, HWSet): #return list of everything in set excep
 
 def deleteUser(user):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
-    Client = MongoClient(connection_string, tlsCAFile =ca)
+    Client = MongoClient(connection_string, tlsCAFile=ca)
     Client.drop_database(user)
 
 
 def deleteProject(user, project):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
-    Client = MongoClient(connection_string, tlsCAFile =ca)
+    Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     db.drop_collection(project)
 
 
 def createHWSet(user, project, set_name):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
-    Client = MongoClient(connection_string, tlsCAFile =ca)
+    Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
     doc = {"Set Name": set_name}
@@ -69,7 +71,7 @@ def createHWSet(user, project, set_name):
 
 def deleteHWSet(user, project, set_name):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
-    Client = MongoClient(connection_string, tlsCAFile =ca)
+    Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
     col.delete_one({"Set Name": set_name})
@@ -77,16 +79,16 @@ def deleteHWSet(user, project, set_name):
 
 def checkOut(user, project, HWSet, item, qty, setType):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
-    Client = MongoClient(connection_string, tlsCAFile =ca)
+    Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
-    data = col.find_one({"Set Name": HWSet}) #doc
+    data = col.find_one({"Set Name": HWSet})  # doc
     if data.__contains__(item):
         itemArr = data[item]
         num = itemArr[0]
         returnedVal = stockDB.checkOutItem(item, setType, qty)
         if returnedVal != 0:
-            col.update_one({"Set Name": HWSet}, {"$set": {item: [int(returnedVal)+int(num), setType]}})
+            col.update_one({"Set Name": HWSet}, {"$set": {item: [int(returnedVal) + int(num), setType]}})
         else:
             col.update_one({"Set Name": HWSet}, {"$set": {item: [(int(num) + int(qty)), setType]}})
         # bug - qty user wants to check out might not be amt they actually can check out
@@ -101,7 +103,7 @@ def checkOut(user, project, HWSet, item, qty, setType):
 
 def checkIn(user, project, HWSet, item, qty):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
-    Client = MongoClient(connection_string, tlsCAFile =ca)
+    Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
     doc = col.find_one({"Set Name": HWSet})
@@ -112,4 +114,3 @@ def checkIn(user, project, HWSet, item, qty):
         qty = userItemQty
     col.update_one({"Set Name": HWSet}, {"$set": {item: [(int(userItemQty) - int(qty)), userItemType]}})
     stockDB.checkInItem(item, userItemType, qty)
-
