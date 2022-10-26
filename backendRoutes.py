@@ -2,11 +2,12 @@ from flask import Flask
 
 import stockDB
 import userDB
+import loginDB
 
 app = Flask(__name__)
 
 #UserDB Backend Requests
-@app.route('/createProject/<user>/<project_name>', methods=['POST'])
+@app.route('/createProject/<user>/<project_name>', methods=['GET', 'POST'])
 def createProject(user, project_name):
    userDB.createProject(user, project_name)
 
@@ -71,4 +72,21 @@ def checkInDev(item, set_name, qty):
 @app.route('/checkout/<item>/<set_name>/<qty>')
 def checkOutDev(item, set_name, qty):
    stockDB.checkOutItem(item, set_name, qty)
+
+##########################################################################################################################################
+##########################################################################################################################################
+##########################################################################################################################################
+
+#login backend requests
+
+@app.route('/registerUser/<username>/<password>')
+def registerUser(username, password):
+   return loginDB.registerUser(username,password)
+
+
+@app.route('/verifyLogin/<username>/<password>')
+def verifyLogin(username, password):
+   return loginDB.verifyLogin(username,password)
+
+
 app.run()
