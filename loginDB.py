@@ -10,13 +10,13 @@ def registerUser(username, password):
     alrExists = db.list_collection_names().__contains__(encryptedUser)
     if alrExists:
         print("User already exists. Choose another name.")
-        return False
+        return "False"
     else:
         db.create_collection(encryptedUser)
         doc = {"Password": encryptedPass}
         col = db[encryptedUser]
         col.insert_one(doc)
-        return True
+        return "True"
 
 
 def verifyLogin(username, password):
@@ -28,15 +28,15 @@ def verifyLogin(username, password):
     inDB = db.list_collection_names().__contains__(encryptedUser)
     if not inDB:
         print("Invalid username.")
-        return False
+        return "False"
     else:
         col = db[encryptedUser]
         passArr = col.find_one({}, {"_id": 0})
         actualPass = passArr["Password"]
         if actualPass == encryptedPass:
-            return True
+            return "True"
         else:
-            return False
+            return "False"
 
 
 def encrypt(word):
@@ -53,3 +53,4 @@ def decrypt(word):
     return original
 
 
+print(decrypt("zzhw"))
