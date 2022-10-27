@@ -56,7 +56,7 @@ class Login extends React.Component {
    handleLogin = async (event) => {
     event.preventDefault();
     
-    let str = await verifyLogin(this.state.user, this.state.pass);
+    let str = await verifyLogin(this.state.user, this.state.pass); //must use await
     
     if (str === "False") {
       alert("Incorrect Credentials");
