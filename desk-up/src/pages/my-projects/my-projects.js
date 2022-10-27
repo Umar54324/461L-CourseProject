@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./projects.css";
+import "./my-projects.css";
 
 const options = [
   {
