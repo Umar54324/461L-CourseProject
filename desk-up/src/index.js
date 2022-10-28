@@ -9,8 +9,10 @@ import {
   useNavigate,
   redirect,
 } from "react-router-dom";
-import Projects from "./projects/projects.js";
-import "./projects/projects.css";
+import Projects from "./pages/my-projects/my-projects.js";
+
+
+
 async function registerUser(username, password) {
   let user = username.toString();
   let pass = password.toString();
@@ -30,6 +32,8 @@ async function verifyLogin(username, password) {
   return data;
 }
 
+
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +45,7 @@ class Login extends React.Component {
 
   handleUser = (event) => {
     event.preventDefault();
+
     this.setState({ user: event.target.value }, () => {
       console.log(this.state.user, "user");
     });
@@ -48,6 +53,7 @@ class Login extends React.Component {
 
   handlePass = (event) => {
     event.preventDefault();
+
     this.setState({ pass: event.target.value }, () => {
       console.log(this.state.pass, "pass");
     });
@@ -57,11 +63,12 @@ class Login extends React.Component {
     event.preventDefault();
 
     let str = verifyLogin(this.state.user, this.state.pass);
-    str = "True";
+    // str = "True";
     if (str === "False") {
       alert("Incorrect Credentials");
     } else {
-      redirect("projects");
+    //   redirect("projects");
+        window.location.assign("/projects");
     }
   };
 
