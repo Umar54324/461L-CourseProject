@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./login/login.css";
+import "./pages/login/login.css";
 import {
   BrowserRouter,
   Routes,
@@ -10,9 +10,7 @@ import {
   redirect,
 } from "react-router-dom";
 import Projects from "./pages/my-projects/my-projects.js";
-
-
-
+import "./pages/my-projects/my-projects.css";
 async function registerUser(username, password) {
   let user = username.toString();
   let pass = password.toString();
@@ -59,16 +57,15 @@ class Login extends React.Component {
     });
   };
 
-  handleLogin = (event) => {
+   handleLogin = async (event) => {
     event.preventDefault();
-
-    let str = verifyLogin(this.state.user, this.state.pass);
-    // str = "True";
+    
+    let str = await verifyLogin(this.state.user, this.state.pass); //must use await
+    
     if (str === "False") {
       alert("Incorrect Credentials");
     } else {
-    //   redirect("projects");
-        window.location.assign("/projects");
+      window.location.assign("/projects");
     }
   };
 
@@ -123,6 +120,7 @@ class App extends React.Component {
               <Route path="projects" element={<Projects />} />
             </Routes>
           </BrowserRouter>
+          {/* <Login></Login> */}
         </div>
       </div>
     );

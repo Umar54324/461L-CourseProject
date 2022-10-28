@@ -1,10 +1,15 @@
-from flask import Flask
+import os
+from flask import Flask, send_from_directory
 
 import stockDB
 import userDB
 import loginDB
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='', static_folder='desk-up/build/')
+
+@app.route('/')
+def index():
+    return send_from_directory('desk-up/build/', 'index.html')
 
 #UserDB Backend Requests
 @app.route('/createProject/<user>/<project_name>', methods=['GET', 'POST'])
@@ -89,4 +94,4 @@ def verifyLogin(username, password):
    return loginDB.verifyLogin(username,password)
 
 
-app.run()
+app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))

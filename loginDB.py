@@ -1,9 +1,11 @@
 from pymongo import MongoClient
+import certifi
 
+ca = certifi.where()
 
 def registerUser(username, password):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
-    Client = MongoClient(connection_string)
+    Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client["Passwords"]
     encryptedUser = encrypt(username)
     encryptedPass = encrypt(password)
@@ -21,7 +23,7 @@ def registerUser(username, password):
 
 def verifyLogin(username, password):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
-    Client = MongoClient(connection_string)
+    Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client["Passwords"]
     encryptedUser = encrypt(username)
     encryptedPass = encrypt(password)
@@ -53,4 +55,4 @@ def decrypt(word):
     return original
 
 
-print(decrypt("zzhw"))
+# print(decrypt("zzhw"))
