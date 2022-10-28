@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "start": "node index.js"
+  }
   "dependencies": {
     "react-router-dom": "^6.4.2"
   }
