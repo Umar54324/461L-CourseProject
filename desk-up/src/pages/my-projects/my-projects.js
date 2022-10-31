@@ -8,65 +8,44 @@ const options = [
     value: "Select product...",
   },
   {
-    label: "[HW] CPU",
+    label: "[HW] CPU (5 left in stock)",
     value: "[HW] CPU",
   },
   {
-    label: "[HW] GPU",
+    label: "[HW] GPU (5 left in stock)",
     value: "[HW] GPU",
   },
   {
-    label: "[HW] Power Supply",
+    label: "[HW] Power Supply (5 left in stock)",
     value: "[HW] Power Supply",
   },
   {
-    label: "[PER] Gaming Mouse",
+    label: "[PER] Gaming Mouse (5 left in stock)",
     value: "[PER] Gaming Mouse",
   },
   {
-    label: "[PER] Gaming Headset",
+    label: "[PER] Gaming Headset (5 left in stock)",
     value: "[PER] Gaming Headset",
   },
   {
-    label: "[PER] Gaming Keyboard",
+    label: "[PER] Gaming Keyboard (5 left in stock)",
     value: "[PER] Gaming Keyboard",
   },
   {
-    label: "[DEC] RGB Lights",
+    label: "[DEC] RGB Lights (5 left in stock)",
     value: "[DEC] RGB Lights",
   },
   {
-    label: "[DEC] Monitor Stand",
+    label: "[DEC] Monitor Stand (5 left in stock)",
     value: "[DEC] Monitor Stand",
   },
   {
-    label: "[DEC] Keyboard Mat",
+    label: "[DEC] Keyboard Mat (5 left in stock)",
     value: "[DEC] Keyboard Mat",
   },
 ];
 
 // ===================================================================================================================================================
-
-// function Item(props) {
-//     return (
-//         <div>
-//             <table>
-//                 <tr>
-//                     <td>{props.itemName}</td>
-//                     <td>x{props.quantity}</td>
-//                     <td>
-//                         <input
-//                         className="input" type="text" placeholder="Enter quantity"
-//                         />
-//                     </td>
-//                     <td>
-//                         <button className="input">Checkin</button>
-//                     </td>
-//                 </tr>
-//             </table>
-//         </div>
-//     );
-// }
 
 class Item extends React.Component {
   constructor(props) {
@@ -116,6 +95,7 @@ class SingleProject extends React.Component {
 
     this.handleSelect = this.handleSelect.bind(this);
     this.handleInput = this.handleInput.bind(this);
+    this.handleCheckin = this.handleCheckin.bind(this);
     this.handleCheckout = this.handleCheckout.bind(this);
   }
 
@@ -129,6 +109,16 @@ class SingleProject extends React.Component {
     console.log("Quantity chosen.");
     event.preventDefault();
     this.setState({ textQuantity: event.target.value });
+  }
+
+  handleCheckin(event) {
+    event.preventDefault();
+    console.log("Item checked out.");
+    this.setState({
+      quantity: Number(this.state.textQuantity) + Number(this.state.quantity),
+      checkoutCapacity:
+        Number(this.state.checkoutCapacity) - Number(this.state.textQuantity),
+    });
   }
 
   handleCheckout(event) {
@@ -170,12 +160,16 @@ class SingleProject extends React.Component {
                   placeholder="Enter quantity"
                 />
 
+                <button onClick={this.handleCheckin} className="input">
+                  Checkin
+                </button>
+
                 <button onClick={this.handleCheckout} className="input">
                   Checkout
                 </button>
                 <div>
                   <label>
-                    {this.state.itemToCheckOut} x{this.state.quantity}
+                    Most recent item processed: {this.state.itemToCheckOut}
                   </label>
                 </div>
               </form>
@@ -216,8 +210,5 @@ class App extends React.Component {
 }
 
 // ===================================================================================================================================================
-
-// const root = ReactDOM.createRoot(document.getElementById("root"));
-// root.render(<App />);
 
 export default Projects;

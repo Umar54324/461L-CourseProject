@@ -10,12 +10,10 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-
 .login {
     text-align: center;
     padding: 200px 0;
 }
-
 
 button {
     background-color: lightcyan;
@@ -32,6 +30,7 @@ input {
     border: none;
     border-radius: 15px;
     background: lightcyan;
+    color:rgb(99, 52, 110);
     width: 8em;
     height: 0.25em;
     font-family: Arial, Helvetica, sans-serif;
@@ -39,9 +38,15 @@ input {
     margin: 10px;
 }
 
+input::placeholder {
+    color:rgb(99, 52, 110);
+}
+
 button:hover {
     border: 1px solid paleturquoise;
     background-color: white;
     color: rgb(99, 52, 110);
   }
+
+
 
