@@ -19,20 +19,20 @@ def createProject(user, project_name):
 
 @app.route('/getAllProjects/<user>')
 def getAllProjects(user):
-   listDB = userDB.getProjects(user)
-   return listDB
+   return userDB.getProjects(user)
+   
 
 
 @app.route('/getHWSets/<user>/<project>')
 def getHWSets(user, project):
-   listd = userDB.getHWSets(user, project)
-   return listd
+   return userDB.getHWSets(user, project)
+
 
 
 @app.route('/getItemsInSet/<user>/<project>/<HWSet>')
 def getItemsInSets(user, project, HWSet):
-   dict = userDB.getItemsInSet(user, project, HWSet)
-   return dict
+   return userDB.getItemsInSet(user, project, HWSet)
+   
 
 
 @app.route('/deleteUser/<user>')
@@ -57,12 +57,12 @@ def deleteHWSet(user, project, set_name):
 
 @app.route('/checkOutUser/<user>/<project>/<HWSet>/<item>/<qty>/<setType>')
 def checkOut(user, project, HWSet, item, qty, setType):
-   userDB.checkOut(user, project, HWSet, item, qty, setType)
+   return userDB.checkOut(user, project, HWSet, item, qty, setType)
 
 
 @app.route('/checkInUser/<user>/<project>/<HWSet>/<item>/<qty>')
 def checkIn(user, project, HWSet, item, qty):
-   userDB.checkIn(user, project, HWSet, item, qty)
+   return userDB.checkIn(user, project, HWSet, item, qty)
 
 ##########################################################################################################################################
 ##########################################################################################################################################
@@ -76,15 +76,17 @@ def checkInDev(item, set_name, qty):
 
 @app.route('/checkout/<item>/<set_name>/<qty>')
 def checkOutDev(item, set_name, qty):
-   stockDB.checkOutItem(item, set_name, qty)
+   return stockDB.checkOutItem(item, set_name, qty)
 
 @app.route('/getAvailability/<hw_type>/<item>')
 def getAvailability(hw_type, item):
-   stockDB.getAvailability(hw_type, item)
+   return stockDB.getAvailability(hw_type, item)
+   
 
 @app.route('/getCapacity/<hw_type>/<item>')
 def getCapacity(hw_type, item):
-   stockDB.getCapacity(hw_type, item);
+   return stockDB.getCapacity(hw_type, item)
+   
 
 ##########################################################################################################################################
 ##########################################################################################################################################
@@ -101,5 +103,5 @@ def registerUser(username, password):
 def verifyLogin(username, password):
    return loginDB.verifyLogin(username,password)
 
-
-app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
+if __name__ == "__main__":
+   app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))

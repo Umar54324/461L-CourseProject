@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 import stockDB
 import certifi
+from flask import jsonify
 
 ca = certifi.where()
 
@@ -17,7 +18,7 @@ def getProjects(user):
     Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     print(db.list_collection_names())
-    return db.list_collection_names()
+    return jsonify(db.list_collection_names())
 
 
 def getHWSets(user, project):
@@ -29,7 +30,7 @@ def getHWSets(user, project):
     for HWSet in col.find({}, {"_id": 0}):
         list.append(HWSet)
     print(list)
-    return list
+    return jsonify(list)
 
 
 def getItemsInSet(user, project, HWSet):  # return list of everything in set except _id, set name, and set type
@@ -87,18 +88,14 @@ def checkOut(user, project, HWSet, item, qty, hw_type):
         itemArr = data[item]
         num = itemArr[0]
         returnedVal = stockDB.checkOutItem(item, hw_type, qty)
-        if returnedVal != 0:
-            col.update_one({"Set Name": HWSet}, {"$set": {item: [int(returnedVal) + int(num), hw_type]}})
-        else:
-            col.update_one({"Set Name": HWSet}, {"$set": {item: [(int(num) + int(qty)), hw_type]}})
+        col.update_one({"Set Name": HWSet}, {"$set": {item: [int(returnedVal) + int(num), hw_type]}})
+        return str(int(returnedVal)+int(num))
         # bug - qty user wants to check out might not be amt they actually can check out
     else:
         # hw_type = data["Set Type"]  # tells us type of item we want to check out, so we know where to find in stock db
         returnedVal = stockDB.checkOutItem(item, hw_type, qty)
-        if returnedVal != 0:
-            col.update_one({"Set Name": HWSet}, {"$set": {item: [returnedVal, hw_type]}})
-        else:
-            col.update_one({"Set Name": HWSet}, {"$set": {item: [qty, hw_type]}})
+        col.update_one({"Set Name": HWSet}, {"$set": {item: [returnedVal, hw_type]}})
+        return str(returnedVal)
 
 
 def checkIn(user, project, HWSet, item, qty):
@@ -114,3 +111,4 @@ def checkIn(user, project, HWSet, item, qty):
         qty = userItemQty
     col.update_one({"Set Name": HWSet}, {"$set": {item: [(int(userItemQty) - int(qty)), userItemType]}})
     stockDB.checkInItem(item, userItemType, qty)
+    return str(qty)
