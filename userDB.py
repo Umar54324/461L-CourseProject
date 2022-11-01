@@ -77,7 +77,7 @@ def deleteHWSet(user, project, set_name):
     col.delete_one({"Set Name": set_name})
 
 
-def checkOut(user, project, HWSet, item, qty, setType):
+def checkOut(user, project, HWSet, item, qty, hw_type):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
     Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
@@ -86,19 +86,19 @@ def checkOut(user, project, HWSet, item, qty, setType):
     if data.__contains__(item):
         itemArr = data[item]
         num = itemArr[0]
-        returnedVal = stockDB.checkOutItem(item, setType, qty)
+        returnedVal = stockDB.checkOutItem(item, hw_type, qty)
         if returnedVal != 0:
-            col.update_one({"Set Name": HWSet}, {"$set": {item: [int(returnedVal) + int(num), setType]}})
+            col.update_one({"Set Name": HWSet}, {"$set": {item: [int(returnedVal) + int(num), hw_type]}})
         else:
-            col.update_one({"Set Name": HWSet}, {"$set": {item: [(int(num) + int(qty)), setType]}})
+            col.update_one({"Set Name": HWSet}, {"$set": {item: [(int(num) + int(qty)), hw_type]}})
         # bug - qty user wants to check out might not be amt they actually can check out
     else:
-        # setType = data["Set Type"]  # tells us type of item we want to check out, so we know where to find in stock db
-        returnedVal = stockDB.checkOutItem(item, setType, qty)
+        # hw_type = data["Set Type"]  # tells us type of item we want to check out, so we know where to find in stock db
+        returnedVal = stockDB.checkOutItem(item, hw_type, qty)
         if returnedVal != 0:
-            col.update_one({"Set Name": HWSet}, {"$set": {item: [returnedVal, setType]}})
+            col.update_one({"Set Name": HWSet}, {"$set": {item: [returnedVal, hw_type]}})
         else:
-            col.update_one({"Set Name": HWSet}, {"$set": {item: [qty, setType]}})
+            col.update_one({"Set Name": HWSet}, {"$set": {item: [qty, hw_type]}})
 
 
 def checkIn(user, project, HWSet, item, qty):

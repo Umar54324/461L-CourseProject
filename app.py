@@ -78,6 +78,14 @@ def checkInDev(item, set_name, qty):
 def checkOutDev(item, set_name, qty):
    stockDB.checkOutItem(item, set_name, qty)
 
+@app.route('/getAvailability/<hw_type>/<item>')
+def getAvailability(hw_type, item):
+   stockDB.getAvailability(hw_type, item)
+
+@app.route('/getCapacity/<hw_type>/<item>')
+def getCapacity(hw_type, item):
+   stockDB.getCapacity(hw_type, item);
+
 ##########################################################################################################################################
 ##########################################################################################################################################
 ##########################################################################################################################################
