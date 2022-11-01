@@ -34,6 +34,26 @@ def checkOutItem(item, set_name, qty):
         # update userDB HWSet quantity
 
 
+def getAvailability():
+    connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
+    Client = MongoClient(connection_string, tlsCAFile=ca)
+    db = Client["Stock"]
+    col = db[set_name]
+    data = col.find_one({"Item": item})
+    avail = data["Availability"]
+    return avail
+
+
+def getCapacity():
+    connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
+    Client = MongoClient(connection_string, tlsCAFile=ca)
+    db = Client["Stock"]
+    col = db[set_name]
+    data = col.find_one({"Item": item})
+    cap = data["Capacity"]
+    return cap
+
+
 def addNewItem(set_name, item, capacity, availability):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
     Client = MongoClient(connection_string, tlsCAFile=ca)
