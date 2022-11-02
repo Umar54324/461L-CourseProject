@@ -197,18 +197,6 @@ class Projects extends React.Component {
   }
 }
 
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-        <div className="project-panel">
-          <Projects />
-        </div>
-      </div>
-    );
-  }
-}
-
 // ===================================================================================================================================================
 
 export default Projects;

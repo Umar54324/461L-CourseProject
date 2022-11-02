@@ -19,10 +19,10 @@ function Navbar() {
                 <Link to="/decoration" className="nav">Decoration</Link>
             </div>
             <div>
-                <Link to="/my-projects" className="nav">My Projects</Link>
+                <Link to="/projects" className="nav">My Projects</Link>
             </div>
             <div>
-                <Link to="/createproject" className="nav">Create Project</Link>
+                <Link to="/create-project" className="nav">Create Project</Link>
             </div>
         </div>
     );
