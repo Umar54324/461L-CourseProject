@@ -36,9 +36,6 @@ class App extends React.Component {
             </Routes>
           </BrowserRouter>
         </div>
-        <div id="test">
-          <Card />
-        </div>
       </div>
     );
   }

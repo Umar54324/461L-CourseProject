@@ -30,7 +30,7 @@ class CreateProject extends React.Component {
     handleCreate = (event) => {
         event.preventDefault();
 
-        window.location.assign("/my-projects");
+        window.location.assign("/projects");
     }
 
     render() {
