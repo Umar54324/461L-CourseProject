@@ -55,14 +55,14 @@ def deleteHWSet(user, project, set_name):
    userDB.deleteHWSet(user, project, set_name)
 
 
-@app.route('/checkOutUser/<user>/<project>/<HWSet>/<item>/<qty>/<setType>')
-def checkOut(user, project, HWSet, item, qty, setType):
-   return userDB.checkOut(user, project, HWSet, item, qty, setType)
+@app.route('/checkOutUser/<user>/<project>/<item>/<qty>/<setType>')
+def checkOut(user, project, item, qty, setType):
+   return userDB.checkOut(user, project, item, qty, setType)
 
 
-@app.route('/checkInUser/<user>/<project>/<HWSet>/<item>/<qty>')
-def checkIn(user, project, HWSet, item, qty):
-   return userDB.checkIn(user, project, HWSet, item, qty)
+@app.route('/checkInUser/<user>/<project>/<item>/<qty>')
+def checkIn(user, project, item, qty):
+   return userDB.checkIn(user, project, item, qty)
 
 ##########################################################################################################################################
 ##########################################################################################################################################
