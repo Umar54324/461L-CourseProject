@@ -31,7 +31,7 @@ function Navbar() {
         </Link>
       </div>
       <div>
-        <Link to="/createproject" className="nav">
+        <Link to="/create-project" className="nav">
           Create Project
         </Link>
       </div>

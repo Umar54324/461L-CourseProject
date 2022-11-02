@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import Navbar from "./navbar/navbar";
 import Login from "./pages/login/login";
 import Card from "./components/Card.js";
+import CreateProject from "./pages/create-project/create-project.js";
 import {
   BrowserRouter,
   Routes,
@@ -31,11 +32,9 @@ class App extends React.Component {
               <Route path="login" element={<Login />} />
               <Route path="projects" element={<Projects />} />
               <Route path="sign-up" element={<Signup />} />
+              <Route path="create-project" element={<CreateProject />} />
             </Routes>
           </BrowserRouter>
-        </div>
-        <div id="test">
-          <Card />
         </div>
       </div>
     );

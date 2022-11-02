@@ -1,0 +1,70 @@
+html {
+    height: 100%;
+}
+
+body {
+    align-items: center;
+    justify-content: center;
+    background-image: linear-gradient(328deg, rgba(0,0,0,1) 0%, rgba(90,60,130,1) 50%, rgba(226,206,255,1) 100%);
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
+p {
+    margin: 10px;
+    font-style: italic;
+}
+
+.create-proj {
+    text-align: center;
+    padding: 200px 0;
+}
+
+.addUser {
+    background-color: lightcyan;
+    border-radius: 10px;
+    border: none;
+    color: #a882b5;
+    width: 6em;
+    height: 2.3em;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 3px;
+}
+
+.create {
+    background-color: black;
+    border-radius: 25px;
+    border: none;
+    color: rgb(142, 47, 252);
+    width: 10em;
+    height: 4em;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 30px;
+}
+
+.create:hover {
+    border: 0px solid transparent;
+    background-color: rgb(126, 32, 235);
+    color: rgb(255, 255, 255);
+    transition: 0.2s;
+}
+
+input {
+    border: none;
+    border-radius: 10px;
+    background: lightcyan;
+    color:rgb(99, 52, 110);
+    width: 9em;
+    height: 0.25em;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 13px;
+    margin: 10px;
+}
+
+input::placeholder {
+    color:rgb(99, 52, 110);
+}
