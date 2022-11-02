@@ -1,11 +1,13 @@
 import os
 from flask import Flask, send_from_directory
+from flask_cors import CORS
 
 import stockDB
 import userDB
 import loginDB
 
 app = Flask(__name__, static_url_path='', static_folder='desk-up/build/')
+CORS(app)
 
 @app.route('/')
 def index():
