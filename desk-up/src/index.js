@@ -12,6 +12,7 @@ import Card from "./components/Card.js";
 import CreateProject from "./pages/create-project/create-project.js";
 import {
   BrowserRouter,
+  HashRouter,
   Routes,
   Route,
   Navigate,
