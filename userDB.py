@@ -33,19 +33,14 @@ def getHWSets(user, project):
     return jsonify(list)
 
 
-def getItemsInSet(user, project, HWSet):  # return list of everything in set except _id, set name, and set type
+def getItemsInSet(user, project, item_name):  # return list of everything in set except _id, set name, and set type
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
     Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
-    dicti = col.find_one({"Set Name": HWSet}, {"_id": 0, "Set Name": 0})
-    ans = {}
-    for key in dicti:
-        arr = dicti[key]
-        val = arr[0]
-        ans[key] = val
-    print(ans)
-    return ans
+    dicti = col.find_one({"Item Name": item_name}, {"_id": 0, "Checked Out": 0, "Item Type": 0})
+    ans = dicti["Item Name"]
+    return str(ans)
 
 
 def deleteUser(user):
@@ -61,54 +56,52 @@ def deleteProject(user, project):
     db.drop_collection(project)
 
 
-def createHWSet(user, project, set_name):
+def createHWSet(user, project, item_name):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
     Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
-    doc = {"Set Name": set_name}
+    doc = {"Item Name": item_name}
     col.insert_one(doc)
 
 
-def deleteHWSet(user, project, set_name):
+def deleteHWSet(user, project, item_name):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
     Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
-    col.delete_one({"Set Name": set_name})
+    col.delete_one({"Item Name": item_name})
 
 
-def checkOut(user, project, HWSet, item, qty, hw_type):
+def checkOut(user, project, item, qty, hw_type):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
     Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
-    data = col.find_one({"Set Name": HWSet})  # doc
+    data = col.find_one({"Item Name": item})  # doc
     if data.__contains__(item):
-        itemArr = data[item]
-        num = itemArr[0]
+        num = data["Checked Out"]
         returnedVal = stockDB.checkOutItem(item, hw_type, qty)
-        col.update_one({"Set Name": HWSet}, {"$set": {item: [int(returnedVal) + int(num), hw_type]}})
+        col.update_one({"Item Name": item}, {"$set": {"Checked Out": int(returnedVal) + int(num)}})
         return str(int(returnedVal)+int(num))
         # bug - qty user wants to check out might not be amt they actually can check out
     else:
         # hw_type = data["Set Type"]  # tells us type of item we want to check out, so we know where to find in stock db
         returnedVal = stockDB.checkOutItem(item, hw_type, qty)
-        col.update_one({"Set Name": HWSet}, {"$set": {item: [returnedVal, hw_type]}})
+        col.update_one({"Item Name": item}, {"$set": {"Checked Out": returnedVal, "Item Type": hw_type}})
         return str(returnedVal)
 
 
-def checkIn(user, project, HWSet, item, qty):
+def checkIn(user, project, item, qty):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
     Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
-    doc = col.find_one({"Set Name": HWSet})
-    itemArr = doc[item]
-    userItemQty = itemArr[0]
-    userItemType = itemArr[1]
+    doc = col.find_one({"Item Name": item})
+    userItemQty = doc["Checked Out"]
+    userItemType = doc["Item Type"]
     if int(qty) > int(userItemQty):
         qty = userItemQty
-    col.update_one({"Set Name": HWSet}, {"$set": {item: [(int(userItemQty) - int(qty)), userItemType]}})
+    col.update_one({"Item Name": item}, {"$set": {"Checked Out": (int(userItemQty) - int(qty))}})
     stockDB.checkInItem(item, userItemType, qty)
     return str(qty)
