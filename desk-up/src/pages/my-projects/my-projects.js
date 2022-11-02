@@ -1,13 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./my-projects.css";
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import ListItemText from '@mui/material/ListItemText';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import ListItemText from "@mui/material/ListItemText";
+import Select from "@mui/material/Select";
+import Checkbox from "@mui/material/Checkbox";
 
 const options = [
   {
@@ -52,17 +52,17 @@ const options = [
   },
 ];
 
-async function getAllProjects(username){
-    let user = username.toString();   
-    const url = "http://127.0.0.1:5000///getAllProjects/" + user;
-    const response = await fetch(url);
-    const data = await response.json();
-    let x = Array();
-    for(let i =0; i<data.length; i++){
-      x.push(data[i]);
-    }
-     console.log(x);
-    return x;
+async function getAllProjects(username) {
+  let user = username.toString();
+  const url = "http://127.0.0.1:5000///getAllProjects/" + user;
+  const response = await fetch(url);
+  const data = await response.json();
+  let x = Array();
+  for (let i = 0; i < data.length; i++) {
+    x.push(data[i]);
+  }
+  console.log(x);
+  return x;
 }
 // ===================================================================================================================================================
 const ITEM_HEIGHT = 48;
@@ -77,35 +77,34 @@ const MenuProps = {
 };
 
 const namesOg = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
+  "Oliver Hansen",
+  "Van Henry",
+  "April Tucker",
+  "Ralph Hubbard",
+  "Omar Alexander",
+  "Carlos Abbott",
+  "Miriam Wagner",
+  "Bradley Wilkerson",
+  "Virginia Andrews",
+  "Kelly Snyder",
 ];
 
 function MultipleSelectCheckmarks(props) {
   const [personName, setPersonName] = React.useState([]);
-  let names= props.projectList;
+  let names = props.projectList;
   // let names = Array().fill("hi");
   // names.push("fuck");
-  
 
   // nameProm.then(value => {
   //   console.log(value);
   //   for(let i = 0; i<value.length; i++){
   //     names.push(value[i]);
   //   }
-    
+
   // });
-  
+
   //  console.log(namesOg);
-   console.log(names);
+  console.log(names);
   //  console.log("hi");
   const handleChange = (event) => {
     const {
@@ -113,7 +112,7 @@ function MultipleSelectCheckmarks(props) {
     } = event;
     setPersonName(
       // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
+      typeof value === "string" ? value.split(",") : value
     );
   };
 
@@ -128,7 +127,7 @@ function MultipleSelectCheckmarks(props) {
           value={personName}
           onChange={handleChange}
           input={<OutlinedInput label="Tag" />}
-          renderValue={(selected) => selected.join(', ')}
+          renderValue={(selected) => selected.join(", ")}
           MenuProps={MenuProps}
         >
           {names.map((name) => (
@@ -247,15 +246,14 @@ class Projects extends React.Component {
   renderProject(projectName) {
     return <SingleProject projectName={projectName} />;
   }
-  getProjectList(user){
+  getProjectList(user) {
     let str = getAllProjects(user);
     let x = Array();
-    str.then(value => {
+    str.then((value) => {
       // console.log(value);
-      for(let i = 0; i<value.length; i++){
+      for (let i = 0; i < value.length; i++) {
         x.push(value[i]);
       }
-      
     });
     // console.log(str);
     // let arr = [];
@@ -269,7 +267,9 @@ class Projects extends React.Component {
     return (
       <div>
         <h1 className="page-title">My Projects</h1>
-        <MultipleSelectCheckmarks projectList= {this.getProjectList("saleh")}></MultipleSelectCheckmarks>
+        <MultipleSelectCheckmarks
+          projectList={this.getProjectList("saleh")}
+        ></MultipleSelectCheckmarks>
         {/* <div className="single-project">{this.renderProject("MyProject1")}</div>
         <div className="single-project">{this.renderProject("MyProject2")}</div> */}
       </div>
