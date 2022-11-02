@@ -5,9 +5,10 @@ import Projects from "./pages/my-projects/my-projects.js";
 import "./pages/my-projects/my-projects.css";
 import Signup from "./pages/sign-up/sign-up.js";
 import "./pages/sign-up/sign-up.css";
-import {  Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Navbar from "./navbar/navbar";
 import Login from "./pages/login/login";
+import Card from "./components/Card.js";
 import {
   BrowserRouter,
   Routes,
@@ -15,11 +16,8 @@ import {
   Navigate,
   useNavigate,
   redirect,
-  Switch
+  Switch,
 } from "react-router-dom";
-
-
-
 
 class App extends React.Component {
   render() {
@@ -35,6 +33,9 @@ class App extends React.Component {
               <Route path="sign-up" element={<Signup />} />
             </Routes>
           </BrowserRouter>
+        </div>
+        <div id="test">
+          <Card />
         </div>
       </div>
     );
