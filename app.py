@@ -11,8 +11,7 @@ app = Flask(__name__, static_url_path='', static_folder='./build')
 
 @app.route('/')
 def index():
-
-return send_from_directory('./build', 'index.html')
+   return send_from_directory('./build', 'index.html')
 
 
 #UserDB Backend Requests
