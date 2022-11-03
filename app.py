@@ -7,7 +7,7 @@ import userDB
 import loginDB
 
 app = Flask(__name__, static_url_path='', static_folder='./build')
-
+CORS(app)
 
 @app.route('/')
 def index():
