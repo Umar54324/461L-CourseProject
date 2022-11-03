@@ -6,12 +6,14 @@ import stockDB
 import userDB
 import loginDB
 
-app = Flask(__name__, static_url_path='', static_folder='desk-up/build/')
-CORS(app)
+app = Flask(__name__, static_url_path='', static_folder='./build')
+
 
 @app.route('/')
 def index():
-    return send_from_directory('desk-up/build/', 'index.html')
+
+return send_from_directory('./build', 'index.html')
+
 
 #UserDB Backend Requests
 @app.route('/createProject/<user>/<project_name>', methods=['GET', 'POST'])
@@ -104,6 +106,14 @@ def registerUser(username, password):
 @app.route('/verifyLogin/<username>/<password>')
 def verifyLogin(username, password):
    return loginDB.verifyLogin(username,password)
+
+
+
+@app.errorhandler(404)
+def not_found(e):
+    return app.send_static_file('index.html')
+
+
 
 if __name__ == "__main__":
    app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
