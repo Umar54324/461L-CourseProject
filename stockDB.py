@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 import certifi
-import jsonify
+from flask import jsonify
 import json
 ca = certifi.where()
 
@@ -58,12 +58,23 @@ def getCapacity(hw_type, item):
     return str(cap)
 
 
-def addNewItem(set_name, item, capacity, availability):
+def getAllStockItems(hw_type):
+    connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
+    Client = MongoClient(connection_string, tlsCAFile=ca)
+    db = Client["Stock"]
+    col = db[str(hw_type)]
+    arr = []
+    for doc in col.find({}, {"_id":0}):
+        arr.append(doc)
+    return jsonify(arr)
+
+
+def addNewItem(set_name, item, capacity, availability, url):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
     Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client["Stock"]
     col = db[set_name]
-    doc = {"Item": item, "Availability": availability, "Capacity": capacity}
+    doc = {"Item": item, "Availability": availability, "Capacity": capacity, "URL": url}
     col.insert_one(doc)
 
 
