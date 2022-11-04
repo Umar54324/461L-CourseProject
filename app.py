@@ -89,6 +89,10 @@ def getAvailability(hw_type, item):
 @app.route('/getCapacity/<hw_type>/<item>')
 def getCapacity(hw_type, item):
    return stockDB.getCapacity(hw_type, item)
+
+@app.route('/getAllStockItems/<hw_type>')
+def getAllStockItems(hw_type):
+   return stockDB.getAllStockItems(hw_type)
    
 
 ##########################################################################################################################################

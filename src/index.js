@@ -8,7 +8,7 @@ import "./pages/sign-up/sign-up.css";
 import { Link } from "react-router-dom";
 import Navbar from "./navbar/navbar";
 import Login from "./pages/login/login";
-import Card from "./components/Card.js";
+import ItemCard from "./components/Card";
 import CreateProject from "./pages/create-project/create-project.js";
 import {
   BrowserRouter,
@@ -20,6 +20,7 @@ import {
   redirect,
   Switch,
 } from "react-router-dom";
+import HardwareList from "./pages/hardware/hardware";
 
 class App extends React.Component {
   render() {
@@ -34,6 +35,7 @@ class App extends React.Component {
               <Route path="projects" element={<Projects />} />
               <Route path="sign-up" element={<Signup />} />
               <Route path="create-project" element={<CreateProject />} />
+              <Route path="hardware" element={<HardwareList />} />
             </Routes>
           </BrowserRouter>
         </div>
