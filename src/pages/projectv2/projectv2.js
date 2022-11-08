@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
 import Button from '@mui/material/Button';
 import { TextField, touchRippleClasses } from '@mui/material';
@@ -15,14 +15,14 @@ import { activeUser } from '../login/login';
 
 
 
-let names = [];
+// let names = [];
 
 async function getAllProjects(username){
     let user = username.toString();   
     const url = "http://127.0.0.1:5000///getAllProjects/" + user;
     const response = await fetch(url);
     const data = await response.json();   
-    names = data;   
+    // names = data;   
     return data;
 }
 async function getCPUCheckedOut(username, projectName){
@@ -63,12 +63,27 @@ async function checkOutBE(username, projectName, itemName, quantity){
     const data = await response.text();        
     return data;
 }
+const delay = ms => new Promise(
+    resolve => setTimeout(resolve, ms)
+);
 function MultipleSelectCheckmarks(props) {
   
     const [personName, setPersonName] = React.useState([]);
+    const [names, setNames] = React.useState([]);
+    //getAllProjects(props.user);
+    const getData=()=>{
+        fetch("http://127.0.0.1:5000///getAllProjects/" + props.user)
+        .then(function(response){
+            return response.json();
+        })
+        .then(function(myJson){
+            setNames(myJson)
+        });
+    }
+    useEffect(() =>{
+        getData()
+    })
     
-    getAllProjects(props.user);
-   
     const handleChange = (event) => {
       const {
         target: { value },
@@ -76,10 +91,10 @@ function MultipleSelectCheckmarks(props) {
       setPersonName(     
         typeof value === 'string' ? value.split(',') : value,
       );
-      
       props.parentInputChange(value);
     };
-  
+    
+
     return (
       <div>
       <div>
@@ -136,6 +151,7 @@ class Entry extends React.Component{
         this.handleSet1Change = this.handleSet1Change.bind(this);
         this.handleSet2Change = this.handleSet2Change.bind(this);
     }
+    
     async initializeVals(){
         let initCPUVal = await getCPUCheckedOut(activeUser.getValue(), this.props.value);
         let initGPUVal = await getGPUCheckedOut(activeUser.getValue(), this.props.value);
@@ -207,6 +223,7 @@ class Entry extends React.Component{
         });
     }
     render(){
+        
         return(
             <div className = "Project">
                 <div className = "PName">
@@ -247,8 +264,9 @@ class ProjectsV2 extends React.Component {
           projectName: name
         })
         
-      }
+    }
     render() {
+        
         return (
             <div>
             <div>

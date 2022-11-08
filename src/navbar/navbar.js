@@ -12,7 +12,7 @@ function handleLogOut(){
 function LogButton(){
     return <button onClick={handleLogOut()}></button>
 }
-function Navbar() {
+function Navbar(props) {
     return (
         <div className="navbar">
             <div>
@@ -29,7 +29,7 @@ function Navbar() {
                 <Link to="/create-project" className="nav">Create Project</Link>
             </div>
             <div>
-                Current User Logged In: {activeUser.getValue()}
+                Current User Logged In: {props.value}
             </div>
         </div>
     );

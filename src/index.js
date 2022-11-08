@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import Navbar from "./navbar/navbar";
 import Login from "./pages/login/login";
 import CreateProject from "./pages/create-project/create-project.js";
+import { activeUser } from './pages/login/login';
 import {
   BrowserRouter,
   HashRouter,
@@ -26,7 +27,7 @@ class App extends React.Component {
       <div>
         <div className="navigator">
           <BrowserRouter>
-            <Navbar />
+            <Navbar value = {activeUser.getValue()}/>
             <Routes>
               <Route index element={<Login />} />
               <Route path="login" element={<Login />} />
