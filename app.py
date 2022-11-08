@@ -15,9 +15,9 @@ def index():
 
 
 #UserDB Backend Requests
-@app.route('/createProject/<user>/<project_name>', methods=['GET', 'POST'])
-def createProject(user, project_name):
-   userDB.createProject(user, project_name)
+@app.route('/createProject/<user>/<project_name>/<description>/<owner>', methods=['GET', 'POST'])
+def createProject(user, project_name, description, owner):
+   userDB.createProject(user, project_name, description, owner)
 
 
 @app.route('/getAllProjects/<user>')
@@ -58,14 +58,24 @@ def deleteHWSet(user, project, set_name):
    userDB.deleteHWSet(user, project, set_name)
 
 
-@app.route('/checkOutUser/<user>/<project>/<item>/<qty>/<setType>')
-def checkOut(user, project, item, qty, setType):
-   return userDB.checkOut(user, project, item, qty, setType)
+@app.route('/checkOutUser/<user>/<project>/<item>/<qty>')
+def checkOut(user, project, item, qty):
+   return userDB.checkOut(user, project, item, qty)
 
 
 @app.route('/checkInUser/<user>/<project>/<item>/<qty>')
 def checkIn(user, project, item, qty):
    return userDB.checkIn(user, project, item, qty)
+
+
+@app.route('/addAuthorizedUser/<user>/<project>/<desc>/<owner>')
+def addAuthorizedUser(user, project, desc, owner):
+   return userDB.addAuthorizedUser(user, project, desc, owner)
+
+
+@app.route('/updateSharedProjects/<project>/<owner>/<cpu>/<gpu>')
+def updateSharedProjects(project, owner, cpu, gpu):
+   userDB.updateSharedProjects(project, owner, cpu, gpu)
 
 ##########################################################################################################################################
 ##########################################################################################################################################
@@ -73,24 +83,24 @@ def checkIn(user, project, item, qty):
 
 #stockBackend Requests
 
-@app.route('/checkin/<item>/<set_name>/<qty>')
-def checkInDev(item, set_name, qty):
-   stockDB.checkInItem(item, set_name, qty)
+@app.route('/checkin/<item>/<qty>')
+def checkInDev(item, qty):
+   stockDB.checkInItem(item, qty)
 
-@app.route('/checkout/<item>/<set_name>/<qty>')
-def checkOutDev(item, set_name, qty):
-   return stockDB.checkOutItem(item, set_name, qty)
+@app.route('/checkout/<item>/<qty>')
+def checkOutDev(item, qty):
+   return stockDB.checkOutItem(item, qty)
 
-@app.route('/getAvailability/<hw_type>/<item>')
-def getAvailability(hw_type, item):
-   return stockDB.getAvailability(hw_type, item)
+@app.route('/getAvailability/<item>')
+def getAvailability(item):
+   return stockDB.getAvailability(item)
    
 
-@app.route('/getCapacity/<hw_type>/<item>')
-def getCapacity(hw_type, item):
-   return stockDB.getCapacity(hw_type, item)
+@app.route('/getCapacity/<item>')
+def getCapacity(item):
+   return stockDB.getCapacity(item)
 
-@app.route('/getAllStockItems/<hw_type>')
+@app.route('/getAllStockItems')
 def getAllStockItems(hw_type):
    return stockDB.getAllStockItems(hw_type)
    
