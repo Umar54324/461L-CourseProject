@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./pages/login/login.css";
 import Projects from "./pages/my-projects/my-projects.js";
+import ProjectsV2 from "./pages/projectv2/projectv2.js";
+import "./pages/projectv2/projectv2.css";
 import "./pages/my-projects/my-projects.css";
 import Signup from "./pages/sign-up/sign-up.js";
 import "./pages/sign-up/sign-up.css";
@@ -32,7 +34,7 @@ class App extends React.Component {
             <Routes>
               <Route index element={<Login />} />
               <Route path="login" element={<Login />} />
-              <Route path="projects" element={<Projects />} />
+              <Route path="projects" element={<ProjectsV2 />} />
               <Route path="sign-up" element={<Signup />} />
               <Route path="create-project" element={<CreateProject />} />
               <Route path="hardware" element={<HardwareList />} />
