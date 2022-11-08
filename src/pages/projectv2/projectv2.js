@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Button from '@mui/material/Button';
-import { TextField } from '@mui/material';
+import { TextField, touchRippleClasses } from '@mui/material';
 import './projectv2.css';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -130,65 +130,59 @@ class Entry extends React.Component{
             set1Val: 0,
             set2Val: 0
         };
-        this.initializeVals();
+        //this.initializeVals();
         this.initializeVals = this.initializeVals.bind(this);
+        this.handleGenClick = this.handleGenClick.bind( this);
+        this.handleSet1Change = this.handleSet1Change.bind(this);
+        this.handleSet2Change = this.handleSet2Change.bind(this);
     }
     async initializeVals(){
         let initCPUVal = await getCPUCheckedOut(activeUser.getValue(), this.props.value);
         let initGPUVal = await getGPUCheckedOut(activeUser.getValue(), this.props.value);
         console.log(initCPUVal);
         console.log(initGPUVal);
-        this.setState = ({
-            set1CheckedOut: Number(initCPUVal),
-            set2CheckedOut: Number(initGPUVal),
+        this.setState({
+            set1CheckedOut: (initCPUVal),
+            set2CheckedOut: (initGPUVal),
             set1Val: initCPUVal,
             set2Val: initGPUVal
         });
         console.log(this.state.set1CheckedOut);
         console.log(this.state.set2CheckedOut);
+        
     }
     async componentDidUpdate(prevProps, prevState){
         if(prevProps.value != this.props.value){
             await this.initializeVals();
         }
+        // this.initializeVals = this.initializeVals.bind(this);
+        // this.handleGenClick = this.handleGenClick.bind( this);
+        // this.handleSet1Change = this.handleSet1Change.bind(this);
+        // this.handleSet2Change = this.handleSet2Change.bind(this);
     }
-    // handleClick(){
-    //     let button = this.state.joinButton;
-    //     button = this.state.isJoined ? 'Join' : 'Leave';
-    //     if(!this.state.isJoined){
-    //         // joinProjectBackend(this.props.value);           
-    //     }
-    //     else{
-    //         // leaveProjectBackend(this.props.value);
-    //     }
-    //     this.setState({
-    //         joinButton: button,
-    //         isJoined: !this.state.isJoined
-    //     })
-    // }
     async handleGenClick(name, set){
         if(name == 'Check In'){
             if(set == 'Set1'){   //CPU
                 // await checkInBE(activeUser.getValue() ,this.props.value, "CPU", this.state.set1Val);                           
                  this.setState({
-                    set1CheckedOut: this.state.set1CheckedOut - this.state.set1Val,
+                    set1CheckedOut: Number(Number(this.state.set1CheckedOut) - Number(this.state.set1Val)),
                  });
             }
             else{                
                  this.setState({
-                    set2CheckedOut: this.state.set2CheckedOut - this.state.set2Val,
+                    set2CheckedOut: Number(Number(this.state.set2CheckedOut) - Number(this.state.set2Val)),
                  });
             }
         }
         else{
             if(set == 'Set1'){  //GPU
                 this.setState({
-                    set1CheckedOut: this.state.set1CheckedOut + this.state.set1Val,
+                    set1CheckedOut: Number(Number(this.state.set1CheckedOut) + Number(this.state.set1Val)),
                 });                
             }
             else{
                 this.setState({
-                    set2CheckedOut: this.state.set2CheckedOut + this.state.set2Val,
+                    set2CheckedOut: Number(Number(this.state.set2CheckedOut) + Number(this.state.set2Val)),
                 });  
             }
         }
@@ -199,14 +193,12 @@ class Entry extends React.Component{
     renderGenButton(name, set){
         return <GenButton id = {set} value = {name} onClick = {() => this.handleGenClick(name, set)}/>;
     }
-    handleSet1Change(param){
-       
+    handleSet1Change(param){       
         this.setState({
             set1Val: param
         });
     }
-    handleSet2Change(param){
-        
+    handleSet2Change(param){       
         this.setState({
             set2Val: param
         });
