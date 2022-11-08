@@ -17,6 +17,7 @@ import { activeUser } from '../login/login';
 
 // let names = [];
 
+
 async function getAllProjects(username){
     let user = username.toString();   
     const url = "http://127.0.0.1:5000///getAllProjects/" + user;
@@ -24,6 +25,7 @@ async function getAllProjects(username){
     const data = await response.json();   
     // names = data;   
     return data;
+
 }
 async function getCPUCheckedOut(username, projectName){
     let user = username.toString();  
@@ -67,6 +69,7 @@ const delay = ms => new Promise(
     resolve => setTimeout(resolve, ms)
 );
 function MultipleSelectCheckmarks(props) {
+
   
     const [personName, setPersonName] = React.useState([]);
     const [names, setNames] = React.useState([]);
@@ -97,6 +100,7 @@ function MultipleSelectCheckmarks(props) {
 
     return (
       <div>
+
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <InputLabel id="demo-simple-select-label">Project List</InputLabel>
@@ -118,20 +122,24 @@ function MultipleSelectCheckmarks(props) {
       <div>
         {/* <SingleProject id= "mainProject" user = {"saleh"} projectName = {projectI} onChange></SingleProject> */}
       </div>
-      </div>
-    );
-  }
-
-function GenButton(props){   
-        return(
-            <Button className = "Button" variant = "outlined" onClick = {props.onClick}>{props.value}</Button>
-        )    
+    </div>
+  );
 }
 
-function JoinButton(props){
-    return(
-        <Button className = "Button" variant = "contained" onClick = {props.onClick}>{props.value}</Button>   //Material UI Component 1
-    )
+function GenButton(props) {
+  return (
+    <Button className="Button" variant="outlined" onClick={props.onClick}>
+      {props.value}
+    </Button>
+  );
+}
+
+function JoinButton(props) {
+  return (
+    <Button className="Button" variant="contained" onClick={props.onClick}>
+      {props.value}
+    </Button> //Material UI Component 1
+  );
 }
 
 class Entry extends React.Component{
@@ -214,13 +222,14 @@ class Entry extends React.Component{
     }
     handleSet1Change(param){       
         this.setState({
-            set1Val: param
+          set1CheckedOut: this.state.set1CheckedOut + this.state.set1Val,
         });
     }
     handleSet2Change(param){       
         this.setState({
-            set2Val: param
+          set2CheckedOut: this.state.set2CheckedOut + this.state.set2Val,
         });
+      }
     }
     render(){
         

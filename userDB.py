@@ -125,6 +125,7 @@ def addAuthorizedUser(user, project_name, project_description, owner):
     alrExists = db.list_collection_names().__contains__(encryptedUser)
     if alrExists:
         createProject(user, project_name, project_description, owner)
+        return "True"
     else:
         return "False"
 
@@ -140,6 +141,7 @@ def updateSharedProjects(project_name, owner, cpu_amt, gpu_amt):
                 data = col.find_one({})
                 if(data["Owner"]==owner):
                     col.update_one({}, {"$set": {"CPU": cpu_amt,"GPU":gpu_amt}})
+    return "True"
         
 def getCPU(user, project):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"

@@ -17,7 +17,7 @@ def index():
 #UserDB Backend Requests
 @app.route('/createProject/<user>/<project_name>/<description>/<owner>', methods=['GET', 'POST'])
 def createProject(user, project_name, description, owner):
-   userDB.createProject(user, project_name, description, owner)
+   return userDB.createProject(user, project_name, description, owner)
 
 
 @app.route('/getAllProjects/<user>')
