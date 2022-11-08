@@ -77,6 +77,16 @@ def addAuthorizedUser(user, project, desc, owner):
 def updateSharedProjects(project, owner, cpu, gpu):
    userDB.updateSharedProjects(project, owner, cpu, gpu)
 
+
+@app.route('/getCPU/<user>/<project>')
+def getCPU(user, project):
+   return userDB.getCPU(user, project)
+
+
+@app.route('/getGPU/<user>/<project>')
+def getGPU(user, project):
+   return userDB.getGPU(user, project)
+
 ##########################################################################################################################################
 ##########################################################################################################################################
 ##########################################################################################################################################
