@@ -52,15 +52,15 @@ async function getTotalGPUAvailable(){
     return data;
 }
 async function checkInBE(username, projectName, itemName, quantity){
-    const url = "http://127.0.0.1:5000///checkInUser/" + username + "/" + projectName + "/" + itemName + "/" + quantity + "/";
+    const url = "http://127.0.0.1:5000///checkInUser/" + username + "/" + projectName + "/" + itemName + "/" + quantity;
     const response = await fetch(url);
-    const data = await response.json();        
+    const data = await response.text();        
     return data;
 }   
 async function checkOutBE(username, projectName, itemName, quantity){
-    const url = "http://127.0.0.1:5000///checkOutUser/" + username + "/" + projectName + "/" + itemName + "/" + quantity + "/";
+    const url = "http://127.0.0.1:5000///checkOutUser/" + username + "/" + projectName + "/" + itemName + "/" + quantity;
     const response = await fetch(url);
-    const data = await response.json();        
+    const data = await response.text();        
     return data;
 }
 function MultipleSelectCheckmarks(props) {
@@ -140,16 +140,16 @@ class Entry extends React.Component{
     async initializeVals(){
         let initCPUVal = await getCPUCheckedOut(activeUser.getValue(), this.props.value);
         let initGPUVal = await getGPUCheckedOut(activeUser.getValue(), this.props.value);
-        console.log(initCPUVal);
-        console.log(initGPUVal);
+        // console.log(initCPUVal);
+        // console.log(initGPUVal);
         this.setState({
             set1CheckedOut: (initCPUVal),
             set2CheckedOut: (initGPUVal),
             set1Val: initCPUVal,
             set2Val: initGPUVal
         });
-        console.log(this.state.set1CheckedOut);
-        console.log(this.state.set2CheckedOut);
+        // console.log(this.state.set1CheckedOut);
+        // console.log(this.state.set2CheckedOut);
         
     }
     async componentDidUpdate(prevProps, prevState){
@@ -164,12 +164,13 @@ class Entry extends React.Component{
     async handleGenClick(name, set){
         if(name == 'Check In'){
             if(set == 'Set1'){   //CPU
-                // await checkInBE(activeUser.getValue() ,this.props.value, "CPU", this.state.set1Val);                           
+                 await checkInBE(activeUser.getValue() ,this.props.value, "CPU", this.state.set1Val);                           
                  this.setState({
                     set1CheckedOut: Number(Number(this.state.set1CheckedOut) - Number(this.state.set1Val)),
                  });
             }
             else{                
+                await checkInBE(activeUser.getValue() ,this.props.value, "GPU", this.state.set2Val);  
                  this.setState({
                     set2CheckedOut: Number(Number(this.state.set2CheckedOut) - Number(this.state.set2Val)),
                  });
@@ -177,11 +178,13 @@ class Entry extends React.Component{
         }
         else{
             if(set == 'Set1'){  //GPU
+                await checkOutBE(activeUser.getValue() ,this.props.value, "CPU", this.state.set1Val);   
                 this.setState({
                     set1CheckedOut: Number(Number(this.state.set1CheckedOut) + Number(this.state.set1Val)),
                 });                
             }
             else{
+                await checkOutBE(activeUser.getValue() ,this.props.value, "GPU", this.state.set2Val); 
                 this.setState({
                     set2CheckedOut: Number(Number(this.state.set2CheckedOut) + Number(this.state.set2Val)),
                 });  
