@@ -1,19 +1,37 @@
 .navbar {
-    align-items: center;
-    text-align: center;
-    position: relative;
+  align-items: center;
+  text-align: center;
+  position: relative;
 }
 
 .nav {
-    float: left;
-    width: 120px;
-    padding: 10px 5px 10px 5px;
-    background-color: rgb(197, 157, 207, .3);
-    color: white;
-    border-radius: 20px;
-    text-decoration: none;
+  float: left;
+  width: 120px;
+  padding: 10px 5px 10px 5px;
+  background-color: rgb(197, 157, 207, 0.3);
+  color: white;
+  border-radius: 20px;
+  text-decoration: none;
+}
+
+.logout {
+  float: left;
+  width: 120px;
+  padding: 10px 5px 10px 5px;
+  background-color: rgb(255, 17, 60);
+  color: white;
+  border-radius: 20px;
+  text-decoration: none;
+}
+
+.logout:hover {
+  background-color: rgb(255, 59, 95);
+  color: black;
+  transition: 0.2s;
 }
 
 .nav:hover {
-    background-color: rgb(197, 157, 207, .8);
+  background-color: rgb(197, 157, 207, 0.8);
+  color: palegoldenrod;
+  transition: 0.2s;
 }
