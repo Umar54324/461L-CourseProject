@@ -1,16 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./pages/login/login.css";
-import Projects from "./pages/my-projects/my-projects.js";
 import ProjectsV2 from "./pages/projectv2/projectv2.js";
 import "./pages/projectv2/projectv2.css";
-import "./pages/my-projects/my-projects.css";
 import Signup from "./pages/sign-up/sign-up.js";
 import "./pages/sign-up/sign-up.css";
 import { Link } from "react-router-dom";
 import Navbar from "./navbar/navbar";
 import Login from "./pages/login/login";
-import ItemCard from "./components/Card";
 import CreateProject from "./pages/create-project/create-project.js";
 import {
   BrowserRouter,
@@ -22,7 +19,6 @@ import {
   redirect,
   Switch,
 } from "react-router-dom";
-import HardwareList from "./pages/hardware/hardware";
 
 class App extends React.Component {
   render() {
@@ -37,7 +33,6 @@ class App extends React.Component {
               <Route path="projects" element={<ProjectsV2 />} />
               <Route path="sign-up" element={<Signup />} />
               <Route path="create-project" element={<CreateProject />} />
-              <Route path="hardware" element={<HardwareList />} />
             </Routes>
           </BrowserRouter>
         </div>

@@ -141,4 +141,19 @@ def updateSharedProjects(project_name, owner, cpu_amt, gpu_amt):
                 if(data["Owner"]==owner):
                     col.update_one({}, {"$set": {"CPU": cpu_amt,"GPU":gpu_amt}})
         
-        
+def getCPU(user, project):
+    connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
+    Client = MongoClient(connection_string, tlsCAFile=ca)
+    db = Client[user]
+    col = db[project]
+    data = col.find_one({})
+    return str(data["CPU"])
+
+
+def getGPU(user, project):
+    connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
+    Client = MongoClient(connection_string, tlsCAFile=ca)
+    db = Client[user]
+    col = db[project]
+    data = col.find_one({})
+    return str(data["GPU"])
