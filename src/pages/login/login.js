@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./login.css";
 import { createGlobalstate, useGlobalState } from "state-pool";
 import { createStore } from "state-pool";
+import { Navigate } from "react-router-dom";
 
 const store = createStore();
 store.setState("activeUser", "null");
@@ -66,6 +67,7 @@ function Login(props) {
       activeUser.setValue(user);
       console.log(activeUser.getValue());
       alert("Successfully Logged In");
+      localStorage.setItem("CurrentUser", user);
       window.location.assign("/projects");
     }
   };

@@ -95,7 +95,7 @@ def checkOut(user, project, item, qty):
     col.update_one({item: num}, {"$set": {item: int(returnedVal) + int(num)}})
     updated_doc = col.find_one({})
     updateSharedProjects(project, updated_doc["Owner"], updated_doc["CPU"], updated_doc["GPU"])
-    return str(int(returnedVal)+int(num))
+    return str(int(returnedVal))
     # bug - qty user wants to check out might not be amt they actually can check out
 
 
