@@ -140,3 +140,5 @@ def updateSharedProjects(project_name, owner, cpu_amt, gpu_amt):
                 data = col.find_one({})
                 if(data["Owner"]==owner):
                     col.update_one({}, {"$set": {"CPU": cpu_amt,"GPU":gpu_amt}})
+        
+        

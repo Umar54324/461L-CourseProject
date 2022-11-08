@@ -1,7 +1,7 @@
 import React from "react";
 import "./card.css";
 
-class Card extends React.Component {
+class ItemCard extends React.Component {
   render() {
     return (
       <div class="card">
@@ -32,4 +32,4 @@ class Card extends React.Component {
   }
 }
 
-export default Card;
+export default ItemCard;
