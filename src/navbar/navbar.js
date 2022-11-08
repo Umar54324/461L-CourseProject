@@ -28,6 +28,11 @@ function Navbar(props) {
           Create Project
         </Link>
       </div>
+      <div>
+        <Link to="/login" className="logout">
+          Log Out
+        </Link>
+      </div>
       <div>Current User Logged In: {localStorage.getItem("CurrentUser")}</div>
     </div>
   );
