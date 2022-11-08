@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Button from '@mui/material/Button';
-import { TextField } from '@mui/material';
+import { TextField, touchRippleClasses } from '@mui/material';
 import './projectv2.css';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -25,11 +25,43 @@ async function getAllProjects(username){
     names = data;   
     return data;
 }
-async function getCPUCheckedOut(){
-    
+async function getCPUCheckedOut(username, projectName){
+    let user = username.toString();  
+    const url = "http://127.0.0.1:5000///getCPU/" + user + "/" + projectName;
+    const response = await fetch(url);
+    const data = await response.text();        
+    return data;
 }
-async function getGPUCheckedOut(){
-
+async function getGPUCheckedOut(username, projectName){
+    let user = username.toString();  
+    const url = "http://127.0.0.1:5000///getGPU/" + user + "/" + projectName;
+    const response = await fetch(url);
+    const data = await response.text();        
+    return data;
+}
+async function getTotalCPUAvailable(){   
+    const url = "http://127.0.0.1:5000///getAvailability/CPU";
+    const response = await fetch(url);
+    const data = await response.json();        
+    return data;
+}
+async function getTotalGPUAvailable(){
+    const url = "http://127.0.0.1:5000///getAvailability/GPU";
+    const response = await fetch(url);
+    const data = await response.json();        
+    return data;
+}
+async function checkInBE(username, projectName, itemName, quantity){
+    const url = "http://127.0.0.1:5000///checkInUser/" + username + "/" + projectName + "/" + itemName + "/" + quantity + "/";
+    const response = await fetch(url);
+    const data = await response.json();        
+    return data;
+}   
+async function checkOutBE(username, projectName, itemName, quantity){
+    const url = "http://127.0.0.1:5000///checkOutUser/" + username + "/" + projectName + "/" + itemName + "/" + quantity + "/";
+    const response = await fetch(url);
+    const data = await response.json();        
+    return data;
 }
 function MultipleSelectCheckmarks(props) {
   
@@ -89,7 +121,7 @@ function JoinButton(props){
 
 class Entry extends React.Component{
     constructor(props){
-        super(props);
+        super(props);       
         this.state = {
             joinButton: 'Join',
             isJoined: false,
@@ -98,47 +130,59 @@ class Entry extends React.Component{
             set1Val: 0,
             set2Val: 0
         };
+        //this.initializeVals();
+        this.initializeVals = this.initializeVals.bind(this);
+        this.handleGenClick = this.handleGenClick.bind( this);
+        this.handleSet1Change = this.handleSet1Change.bind(this);
+        this.handleSet2Change = this.handleSet2Change.bind(this);
     }
-    handleClick(){
-        let button = this.state.joinButton;
-        button = this.state.isJoined ? 'Join' : 'Leave';
-        if(!this.state.isJoined){
-            // joinProjectBackend(this.props.value);           
-        }
-        else{
-            // leaveProjectBackend(this.props.value);
-        }
+    async initializeVals(){
+        let initCPUVal = await getCPUCheckedOut(activeUser.getValue(), this.props.value);
+        let initGPUVal = await getGPUCheckedOut(activeUser.getValue(), this.props.value);
+        console.log(initCPUVal);
+        console.log(initGPUVal);
         this.setState({
-            joinButton: button,
-            isJoined: !this.state.isJoined
-        })
+            set1CheckedOut: (initCPUVal),
+            set2CheckedOut: (initGPUVal),
+            set1Val: initCPUVal,
+            set2Val: initGPUVal
+        });
+        console.log(this.state.set1CheckedOut);
+        console.log(this.state.set2CheckedOut);
+        
     }
-    handleGenClick(name, set){
+    async componentDidUpdate(prevProps, prevState){
+        if(prevProps.value != this.props.value){
+            await this.initializeVals();
+        }
+        // this.initializeVals = this.initializeVals.bind(this);
+        // this.handleGenClick = this.handleGenClick.bind( this);
+        // this.handleSet1Change = this.handleSet1Change.bind(this);
+        // this.handleSet2Change = this.handleSet2Change.bind(this);
+    }
+    async handleGenClick(name, set){
         if(name == 'Check In'){
-            if(set == 'Set1'){               
-                 
+            if(set == 'Set1'){   //CPU
+                // await checkInBE(activeUser.getValue() ,this.props.value, "CPU", this.state.set1Val);                           
                  this.setState({
-                    set1CheckedOut: this.state.set1CheckedOut - this.state.set1Val,
+                    set1CheckedOut: Number(Number(this.state.set1CheckedOut) - Number(this.state.set1Val)),
                  });
-
             }
-            else{
-                 
+            else{                
                  this.setState({
-                    set2CheckedOut: this.state.set2CheckedOut - this.state.set2Val,
+                    set2CheckedOut: Number(Number(this.state.set2CheckedOut) - Number(this.state.set2Val)),
                  });
             }
         }
         else{
-            if(set == 'Set1'){
+            if(set == 'Set1'){  //GPU
                 this.setState({
-                    set1CheckedOut: this.state.set1CheckedOut + this.state.set1Val,
-                });             
-    
+                    set1CheckedOut: Number(Number(this.state.set1CheckedOut) + Number(this.state.set1Val)),
+                });                
             }
             else{
                 this.setState({
-                    set2CheckedOut: this.state.set2CheckedOut + this.state.set2Val,
+                    set2CheckedOut: Number(Number(this.state.set2CheckedOut) + Number(this.state.set2Val)),
                 });  
             }
         }
@@ -149,14 +193,12 @@ class Entry extends React.Component{
     renderGenButton(name, set){
         return <GenButton id = {set} value = {name} onClick = {() => this.handleGenClick(name, set)}/>;
     }
-    handleSet1Change(param){
-       
+    handleSet1Change(param){       
         this.setState({
             set1Val: param
         });
     }
-    handleSet2Change(param){
-        
+    handleSet2Change(param){       
         this.setState({
             set2Val: param
         });
@@ -173,11 +215,11 @@ class Entry extends React.Component{
                     <TextField id="outlinedset1" label="Enter Qty" variant="outlined" onChange = {(event) => this.handleSet1Change(event.target.value)}/>
                     {this.renderGenButton('Check In', 'Set1')}
                     {this.renderGenButton('Check Out', 'Set1')}
-                    {this.renderJoinButton()}                   
+                    {/* {this.renderJoinButton()}                    */}
                 </div>
                 <div className="Set2">      
                     
-                    <b id = "b">GPU: {this.state.set2CheckedOut}/100</b>
+                    <b id = "b">GPU: {this.state.set2CheckedOut}/ 100</b>
                     
                     <TextField id="outlinedset2" label="Enter Qty" variant="outlined" onChange = {(event) => this.handleSet2Change(event.target.value)}/>
                     {this.renderGenButton('Check In', 'Set2')}
