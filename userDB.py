@@ -1,16 +1,27 @@
 from pymongo import MongoClient
 import stockDB
+import loginDB
 import certifi
 from flask import jsonify
 
 ca = certifi.where()
 
 
-def createProject(user, project_name):
+def createProject(user, project_name, description, owner):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
     Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
-    db.create_collection(project_name)
+    alrExists = db.list_collection_names().__contains__(project_name)
+    if alrExists:
+        print("Project already exists. Choose another project name.")
+        return "False"
+    else:
+        db.create_collection(project_name)
+        col = db[project_name]
+        doc = {"Description":description, "CPU": 0, "GPU":0, "Owner":owner}
+        col.insert_one(doc)
+        return "True"
+    # account for case where new project has same name as another project? esp if user is invited to a project...
 
 
 def getProjects(user):
@@ -73,35 +84,59 @@ def deleteHWSet(user, project, item_name):
     col.delete_one({"Item Name": item_name})
 
 
-def checkOut(user, project, item, qty, hw_type):
+def checkOut(user, project, item, qty):
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
     Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
-    data = col.find_one({"Item Name": item})  # doc
-    if data.__contains__(item):
-        num = data["Checked Out"]
-        returnedVal = stockDB.checkOutItem(item, hw_type, qty)
-        col.update_one({"Item Name": item}, {"$set": {"Checked Out": int(returnedVal) + int(num)}})
-        return str(int(returnedVal)+int(num))
-        # bug - qty user wants to check out might not be amt they actually can check out
-    else:
-        # hw_type = data["Set Type"]  # tells us type of item we want to check out, so we know where to find in stock db
-        returnedVal = stockDB.checkOutItem(item, hw_type, qty)
-        col.update_one({"Item Name": item}, {"$set": {"Checked Out": returnedVal, "Item Type": hw_type}})
-        return str(returnedVal)
+    data = col.find_one({})  # doc
+    num = data[item]
+    returnedVal = stockDB.checkOutItem(item, qty)
+    col.update_one({item: num}, {"$set": {item: int(returnedVal) + int(num)}})
+    updated_doc = col.find_one({})
+    updateSharedProjects(project, updated_doc["Owner"], updated_doc["CPU"], updated_doc["GPU"])
+    return str(int(returnedVal)+int(num))
+    # bug - qty user wants to check out might not be amt they actually can check out
 
 
 def checkIn(user, project, item, qty):
+    # implement owner as param to avoid name conflict (front end will need to get owner from a db getter function so they can pass in to this function)
     connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
     Client = MongoClient(connection_string, tlsCAFile=ca)
     db = Client[user]
     col = db[project]
-    doc = col.find_one({"Item Name": item})
-    userItemQty = doc["Checked Out"]
-    userItemType = doc["Item Type"]
+    # doc = col.find_one({"Item Name": item})
+    doc = col.find_one({})
+    userItemQty = doc[item]
     if int(qty) > int(userItemQty):
         qty = userItemQty
-    col.update_one({"Item Name": item}, {"$set": {"Checked Out": (int(userItemQty) - int(qty))}})
-    stockDB.checkInItem(item, userItemType, qty)
+    col.update_one({item: userItemQty}, {"$set": {item: (int(userItemQty) - int(qty))}})
+    stockDB.checkInItem(item, qty)
+    updated_doc = col.find_one({})
+    updateSharedProjects(project, updated_doc["Owner"], updated_doc["CPU"], updated_doc["GPU"])
     return str(qty)
+
+
+def addAuthorizedUser(user, project_name, project_description, owner):
+    connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
+    Client = MongoClient(connection_string, tlsCAFile=ca)
+    encryptedUser = loginDB.encrypt(user)
+    db = Client["Passwords"]
+    alrExists = db.list_collection_names().__contains__(encryptedUser)
+    if alrExists:
+        createProject(user, project_name, project_description, owner)
+    else:
+        return "False"
+
+
+def updateSharedProjects(project_name, owner, cpu_amt, gpu_amt):
+    connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
+    Client = MongoClient(connection_string, tlsCAFile=ca)
+    for user in Client.list_database_names():
+        db = Client[user]
+        for proj in db.list_collection_names():
+            if(proj == project_name):
+                col = db[project_name]
+                data = col.find_one({})
+                if(data["Owner"]==owner):
+                    col.update_one({}, {"$set": {"CPU": cpu_amt,"GPU":gpu_amt}})
