@@ -17,13 +17,13 @@ import { activeUser } from '../login/login';
 
 let names = [];
 
-async function getAllProjects(username){
-    let user = username.toString();   
-    const url = "http://127.0.0.1:5000///getAllProjects/" + user;
-    const response = await fetch(url);
-    const data = await response.json();   
-    names = data;   
-    return data;
+async function getAllProjects(username) {
+  let user = username.toString();
+  const url = "http://127.0.0.1:5000///getAllProjects/" + user;
+  const response = await fetch(url);
+  const data = await response.json();
+  names = data;
+  return data;
 }
 async function getCPUCheckedOut(username, projectName){
     let user = username.toString();  
@@ -64,24 +64,21 @@ async function checkOutBE(username, projectName, itemName, quantity){
     return data;
 }
 function MultipleSelectCheckmarks(props) {
-  
-    const [personName, setPersonName] = React.useState([]);
-    
-    getAllProjects(props.user);
-   
-    const handleChange = (event) => {
-      const {
-        target: { value },
-      } = event;
-      setPersonName(     
-        typeof value === 'string' ? value.split(',') : value,
-      );
-      
-      props.parentInputChange(value);
-    };
-  
-    return (
-      <div>
+  const [personName, setPersonName] = React.useState([]);
+
+  getAllProjects(props.user);
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(typeof value === "string" ? value.split(",") : value);
+
+    props.parentInputChange(value);
+  };
+
+  return (
+    <div>
       <div>
         <FormControl sx={{ m: 1, width: 300 }}>
           <InputLabel id="demo-simple-select-label">Project List</InputLabel>
@@ -103,20 +100,24 @@ function MultipleSelectCheckmarks(props) {
       <div>
         {/* <SingleProject id= "mainProject" user = {"saleh"} projectName = {projectI} onChange></SingleProject> */}
       </div>
-      </div>
-    );
-  }
-
-function GenButton(props){   
-        return(
-            <Button className = "Button" variant = "outlined" onClick = {props.onClick}>{props.value}</Button>
-        )    
+    </div>
+  );
 }
 
-function JoinButton(props){
-    return(
-        <Button className = "Button" variant = "contained" onClick = {props.onClick}>{props.value}</Button>   //Material UI Component 1
-    )
+function GenButton(props) {
+  return (
+    <Button className="Button" variant="outlined" onClick={props.onClick}>
+      {props.value}
+    </Button>
+  );
+}
+
+function JoinButton(props) {
+  return (
+    <Button className="Button" variant="contained" onClick={props.onClick}>
+      {props.value}
+    </Button> //Material UI Component 1
+  );
 }
 
 class Entry extends React.Component{
@@ -198,13 +199,14 @@ class Entry extends React.Component{
     }
     handleSet1Change(param){       
         this.setState({
-            set1Val: param
+          set1CheckedOut: this.state.set1CheckedOut + this.state.set1Val,
         });
     }
     handleSet2Change(param){       
         this.setState({
-            set2Val: param
+          set2CheckedOut: this.state.set2CheckedOut + this.state.set2Val,
         });
+      }
     }
     render(){
         return(
@@ -234,34 +236,36 @@ class Entry extends React.Component{
 
 }
 class ProjectsV2 extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            projectName: 'N/A',
-        };
-        // console.log(store.getState("activeUser"));
-        this.onInputChange = this.onInputChange.bind(this);
-    }
-    onInputChange(name){
-        this.setState({
-          projectName: name
-        })
-        
-      }
-    render() {
-        return (
-            <div>
-            <div>
-            <MultipleSelectCheckmarks user = {activeUser.getValue()} parentInputChange = {this.onInputChange}></MultipleSelectCheckmarks>
-            </div>
-            <div className="Projects">
-                <div className="Entrys">
-                    <Entry value = {this.state.projectName}/>
-                </div>
-            </div>
-            </div>
-        );
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      projectName: "N/A",
+    };
+    // console.log(store.getState("activeUser"));
+    this.onInputChange = this.onInputChange.bind(this);
+  }
+  onInputChange(name) {
+    this.setState({
+      projectName: name,
+    });
+  }
+  render() {
+    return (
+      <div>
+        <div>
+          <MultipleSelectCheckmarks
+            user={activeUser.getValue()}
+            parentInputChange={this.onInputChange}
+          ></MultipleSelectCheckmarks>
+        </div>
+        <div className="Projects">
+          <div className="Entrys">
+            <Entry value={this.state.projectName} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default ProjectsV2;
