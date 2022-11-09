@@ -47,6 +47,7 @@ class CreateProject extends React.Component {
     this.state = {
       projectName: "null",
       authorizedUsers: "",
+      projectDesc: "",
     };
   }
 
@@ -62,6 +63,12 @@ class CreateProject extends React.Component {
     // const newAuthUsers = this.state.authorizedUsers.slice(); // create a copy array
     // newAuthUsers.push(event.target.value);
     this.setState({ authorizedUsers: event.target.value });
+  };
+
+  handleDescChange = (event) => {
+    event.preventDefault();
+
+    this.setState({ projectDesc: event.target.value });
   };
 
   handleCreate = async (event) => {
@@ -121,6 +128,14 @@ class CreateProject extends React.Component {
             {/* <button className="addUser" onClick={this.handleAddUser}>
               Add User
             </button> */}
+          </div>
+          <div>
+            <p>Enter project description</p>
+            <input
+              type="text"
+              onChange={this.handleDescChange}
+              placeholder="Type description..."
+            />
           </div>
           <button className="create" onClick={this.handleCreate}>
             Create Project
