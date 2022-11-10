@@ -23,6 +23,14 @@ async function getAllProjects(username) {
   // names = data;
   return data;
 }
+async function getProjectId(username, projectName) {
+  let user = username.toString();
+  let proj_name = projectName.toString();
+  const url = "http://127.0.0.1:5000///getProjID/" + user + "/" + projectName;
+  const response = await fetch(url);
+  const data = await response.text();
+  return data;
+}
 async function getCPUCheckedOut(username, projectName) {
   let user = username.toString();
   const url = "http://127.0.0.1:5000///getCPU/" + user + "/" + projectName;
@@ -158,6 +166,7 @@ class Entry extends React.Component {
       set2Val: 0,
       cpuAvailable: 50,
       gpuAvailable: 100,
+      proj_id: 0,
     };
     //this.initializeVals();
     this.initializeVals = this.initializeVals.bind(this);
@@ -177,6 +186,11 @@ class Entry extends React.Component {
       //   activeUser.getValue(),
       this.props.value
     );
+    let id = await getProjectId(
+      localStorage.getItem("CurrentUser"),
+      this.props.value
+    );
+
     // console.log(initCPUVal);
     // console.log(initGPUVal);
     this.setState({
@@ -184,6 +198,7 @@ class Entry extends React.Component {
       set2CheckedOut: initGPUVal,
       set1Val: initCPUVal,
       set2Val: initGPUVal,
+      proj_id: id,
     });
     // console.log(this.state.set1CheckedOut);
     // console.log(this.state.set2CheckedOut);
@@ -212,67 +227,171 @@ class Entry extends React.Component {
     });
   }
   async handleGenClick(name, set) {
-    if (name == "Check In") {
-      if (set == "Set1") {
+    if (name === "Check In") {
+      if (set === "Set1") {
         //CPU
-        let num = await checkInBE(
-          localStorage.getItem("CurrentUser"),
-          //   activeUser.getValue(),
-          this.props.value,
-          "CPU",
-          this.state.set1Val
-        );
-        this.setState({
-          set1CheckedOut: Number(
-            Number(this.state.set1CheckedOut) - Number(num)
-          ),
-        });
-        await this.updateCPUCap();
+        let enteredVal = this.state.set1Val;
+        if (enteredVal > this.state.set1CheckedOut) {
+          if (
+            window.confirm(
+              "You asked to check in more CPU items than what you have checked out. Would you like to check in all your CPU items?"
+            )
+          ) {
+            document.getElementById("outlinedset1").value = "";
+            let num = await checkInBE(
+              localStorage.getItem("CurrentUser"),
+              //   activeUser.getValue(),
+              this.props.value, //project name
+              "CPU",
+              this.state.set1Val
+            );
+            this.setState({
+              set1CheckedOut: Number(
+                Number(this.state.set1CheckedOut) - Number(num)
+              ),
+            });
+            await this.updateCPUCap();
+          }
+        } else {
+          document.getElementById("outlinedset1").value = "";
+          let num = await checkInBE(
+            localStorage.getItem("CurrentUser"),
+            //   activeUser.getValue(),
+            this.props.value, //project name
+            "CPU",
+            this.state.set1Val
+          );
+          this.setState({
+            set1CheckedOut: Number(
+              Number(this.state.set1CheckedOut) - Number(num)
+            ),
+          });
+          await this.updateCPUCap();
+        }
       } else {
-        let num = await checkInBE(
-          localStorage.getItem("CurrentUser"),
-          //   activeUser.getValue(),
-          this.props.value,
-          "GPU",
-          this.state.set2Val
-        );
-        this.setState({
-          set2CheckedOut: Number(
-            Number(this.state.set2CheckedOut) - Number(num)
-          ),
-        });
-        await this.updateGPUCap();
+        let enterVal = this.state.set2Val;
+        if (enterVal > this.state.set2CheckedOut) {
+          if (
+            window.confirm(
+              "You asked to check in more GPU items than what you have checked out. Would you like to check in all your GPU items?"
+            )
+          ) {
+            document.getElementById("outlinedset2").value = "";
+            let num = await checkInBE(
+              localStorage.getItem("CurrentUser"),
+              //   activeUser.getValue(),
+              this.props.value,
+              "GPU",
+              this.state.set2Val
+            );
+            this.setState({
+              set2CheckedOut: Number(
+                Number(this.state.set2CheckedOut) - Number(num)
+              ),
+            });
+            await this.updateGPUCap();
+          }
+        } else {
+          document.getElementById("outlinedset2").value = "";
+          let num = await checkInBE(
+            localStorage.getItem("CurrentUser"),
+            //   activeUser.getValue(),
+            this.props.value,
+            "GPU",
+            this.state.set2Val
+          );
+          this.setState({
+            set2CheckedOut: Number(
+              Number(this.state.set2CheckedOut) - Number(num)
+            ),
+          });
+          await this.updateGPUCap();
+        }
       }
     } else {
-      if (set == "Set1") {
+      if (set === "Set1") {
         //CPU
-        let num = await checkOutBE(
-          localStorage.getItem("CurrentUser"),
-          //   activeUser.getValue(),
-          this.props.value,
-          "CPU",
-          this.state.set1Val
-        );
-        this.setState({
-          set1CheckedOut: Number(
-            Number(this.state.set1CheckedOut) + Number(num)
-          ),
-        });
-        await this.updateCPUCap();
+        let enterVal = this.state.set1Val;
+        if (enterVal > this.state.cpuAvailable) {
+          if (
+            window.confirm(
+              "You asked to check out more CPU items than what is available. Would you like to check out all remaining CPU items?"
+            )
+          ) {
+            document.getElementById("outlinedset1").value = "";
+            let num = await checkOutBE(
+              localStorage.getItem("CurrentUser"),
+              //   activeUser.getValue(),
+              this.props.value,
+              "CPU",
+              this.state.set1Val
+            );
+            this.setState({
+              set1CheckedOut: Number(
+                Number(this.state.set1CheckedOut) + Number(num)
+              ),
+            });
+            await this.updateCPUCap();
+          }
+        } else {
+          document.getElementById("outlinedset1").value = "";
+          let num = await checkOutBE(
+            localStorage.getItem("CurrentUser"),
+            //   activeUser.getValue(),
+            this.props.value,
+            "CPU",
+            this.state.set1Val
+          );
+          this.setState({
+            set1CheckedOut: Number(
+              Number(this.state.set1CheckedOut) + Number(num)
+            ),
+          });
+          await this.updateCPUCap();
+        }
       } else {
-        let num = await checkOutBE(
-          localStorage.getItem("CurrentUser"),
-          //   activeUser.getValue(),
-          this.props.value,
-          "GPU",
-          this.state.set2Val
-        );
-        this.setState({
-          set2CheckedOut: Number(
-            Number(this.state.set2CheckedOut) + Number(num)
-          ),
-        });
-        await this.updateGPUCap();
+        let input = this.state.set2Val;
+        console.log(this.state.gpuAvailable);
+
+        console.log(input);
+        console.log(input > this.state.gpuAvailable);
+        if (Number(input) > this.state.gpuAvailable) {
+          if (
+            window.confirm(
+              "You asked to check out more GPU items than what is available. Would you like to check out all remaining GPU items?"
+            )
+          ) {
+            document.getElementById("outlinedset2").value = "";
+            let num = await checkOutBE(
+              localStorage.getItem("CurrentUser"),
+              //   activeUser.getValue(),
+              this.props.value,
+              "GPU",
+              this.state.set2Val
+            );
+            this.setState({
+              set2CheckedOut: Number(
+                Number(this.state.set2CheckedOut) + Number(num)
+              ),
+            });
+            await this.updateGPUCap();
+          }
+        } else {
+          document.getElementById("outlinedset2").value = "";
+          let num = await checkOutBE(
+            localStorage.getItem("CurrentUser"),
+            //   activeUser.getValue(),
+            this.props.value,
+            "GPU",
+            this.state.set2Val
+          );
+          this.setState({
+            set2CheckedOut: Number(
+              Number(this.state.set2CheckedOut) + Number(num)
+            ),
+          });
+          await this.updateGPUCap();
+        }
       }
     }
   }
@@ -309,6 +428,9 @@ class Entry extends React.Component {
         <div className="PName">
           <h1>{this.props.value}</h1>
         </div>
+        <div className="proj-id">
+          <p>ID: {this.state.proj_id}</p>
+        </div>
         <div className="Set1">
           <b id="b">
             CPU: {this.state.set1CheckedOut} checked out ,{" "}
@@ -343,11 +465,12 @@ class Entry extends React.Component {
     );
   }
 }
+
 class ProjectsV2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      projectName: "N/A",
+      projectName: "Select your project from the dropdown",
     };
     // console.log(store.getState("activeUser"));
     this.onInputChange = this.onInputChange.bind(this);
@@ -367,8 +490,8 @@ class ProjectsV2 extends React.Component {
             parentInputChange={this.onInputChange}
           ></MultipleSelectCheckmarks>
         </div>
-        <div className="Projects">
-          <div className="Entrys">
+        <div className="Projects" id="projects">
+          <div className="Entrys" id="entries">
             <Entry value={this.state.projectName} />
           </div>
         </div>

@@ -12,36 +12,37 @@ function handleLogOut() {
   window.location.assign("/login");
 }
 function LogButton() {
-  return <Link to="/login" className="logout" onClick={handleLogOut}>
-        Log Out
-      </Link>;
+  return (
+    <Link to="/login" className="logout" onClick={handleLogOut}>
+      Log Out
+    </Link>
+  );
 }
-function renderMan(){
-  
-    return( <div className="navbar">    
-    <div>
-      <Link to="/projects" className="nav">
-        My Projects
-      </Link>
+function renderMan() {
+  return (
+    <div className="navbar">
+      <div>
+        <Link to="/projects" className="nav">
+          My Projects
+        </Link>
+      </div>
+      <div>
+        <Link to="/create-project" className="nav">
+          Create Project
+        </Link>
+      </div>
+      <div>
+        <LogButton />
+      </div>
+      <div>Welcome, {localStorage.getItem("CurrentUser")}!</div>
     </div>
-    <div>
-      <Link to="/create-project" className="nav">
-        Create Project
-      </Link>
-    </div>
-    <div>
-      <LogButton />
-    </div>
-    <div>Current User Logged In: {localStorage.getItem("CurrentUser")}</div>
-  </div>);
-  
+  );
 }
 function Navbar(props) {
-  if(localStorage.getItem("CurrentUser") != null){
+  if (localStorage.getItem("CurrentUser") != null) {
     return renderMan();
-  }
-  else{
-   return (null);
+  } else {
+    return null;
   }
   // return (
   //   <div className="navbar">
@@ -50,7 +51,7 @@ function Navbar(props) {
   //         Login
   //       </Link>
   //     </div>
-      
+
   //     <div>
   //       <Link to="/projects" className="nav">
   //         My Projects

@@ -45,8 +45,9 @@ class CreateProject extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      projectName: "null",
+      projectName: "",
       authorizedUsers: "",
+      projectDesc: "",
     };
   }
 
@@ -64,37 +65,63 @@ class CreateProject extends React.Component {
     this.setState({ authorizedUsers: event.target.value });
   };
 
+  handleDescChange = (event) => {
+    event.preventDefault();
+
+    this.setState({ projectDesc: event.target.value });
+  };
+
   handleCreate = async (event) => {
     event.preventDefault();
     let userArr = this.state.authorizedUsers.split(",");
+    console.log(this.state.projectName);
+    console.log(this.state.projectDesc);
+    if (this.state.projectName === "" || this.state.projectDesc === "") {
+      alert("Please fill out the name and/or description fields.");
+      return;
+    }
+    if (this.state.authorizedUsers === "") {
+      this.setState({
+        authorizedUsers: " ",
+      });
+    }
     let alrExists = await createProj(
-      activeUser.getValue(),
+      localStorage.getItem("CurrentUser"),
       this.state.projectName,
-      "filler for now",
-      activeUser.getValue()
+      this.state.projectDesc,
+      localStorage.getItem("CurrentUser")
     );
     console.log(alrExists);
     if (alrExists === "False") {
+      alert("Project already exists. Choose another project name.");
       return;
     } else {
       for (const element of userArr) {
         addAuthorizedUser(
           element,
           this.state.projectName,
-          "filler for now",
-          activeUser.getValue()
+          this.state.projectDesc,
+          localStorage.getItem("CurrentUser")
         );
       }
     }
-    alert(
-      "Successfully created project " +
-        "'" +
-        this.state.projectName +
-        "'" +
-        "\n" +
-        "Added users " +
-        this.state.authorizedUsers
-    );
+    if (this.state.authorizedUsers === " ") {
+      alert(
+        "Successfully created project " + "'" + this.state.projectName + "'"
+      );
+    } else {
+      alert(
+        "Successfully created project " +
+          "'" +
+          this.state.projectName +
+          "'" +
+          "\n" +
+          "Added user(s): " +
+          this.state.authorizedUsers +
+          " (if they exist)"
+      );
+    }
+
     //window.location.assign("/projects");
   };
 
@@ -121,6 +148,14 @@ class CreateProject extends React.Component {
             {/* <button className="addUser" onClick={this.handleAddUser}>
               Add User
             </button> */}
+          </div>
+          <div>
+            <p>Enter project description</p>
+            <input
+              type="text"
+              onChange={this.handleDescChange}
+              placeholder="Type description..."
+            />
           </div>
           <button className="create" onClick={this.handleCreate}>
             Create Project
