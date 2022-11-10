@@ -66,7 +66,7 @@ function Login(props) {
       // activeUser= this.state.user
       activeUser.setValue(user);
       console.log(activeUser.getValue());
-      alert("Successfully Logged In");
+
       localStorage.setItem("CurrentUser", user);
       window.location.assign("/projects");
     }

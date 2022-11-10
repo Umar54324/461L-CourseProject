@@ -159,3 +159,12 @@ def getGPU(user, project):
     col = db[project]
     data = col.find_one({})
     return str(data["GPU"])
+
+
+def getProjID(user, project):
+    connection_string = "mongodb+srv://salehahmad:rMbinVQqIZXr9fSS@deskupcluster.mifqwta.mongodb.net/test"
+    Client = MongoClient(connection_string, tlsCAFile=ca)
+    db = Client[user]
+    col = db[project]
+    data = col.find_one({})
+    return str(data["_id"])

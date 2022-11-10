@@ -15,7 +15,7 @@ def index():
 
 
 #UserDB Backend Requests
-@app.route('/createProject/<user>/<project_name>/<description>/<owner>', methods=['GET', 'POST'])
+@app.route('/createProject/<user>/<project_name>/<description>/<owner>')
 def createProject(user, project_name, description, owner):
    return userDB.createProject(user, project_name, description, owner)
 
@@ -86,6 +86,11 @@ def getCPU(user, project):
 @app.route('/getGPU/<user>/<project>')
 def getGPU(user, project):
    return userDB.getGPU(user, project)
+
+
+@app.route('/getProjID/<user>/<projectname>')
+def getProjID(user, projectname):
+   return userDB.getProjID(user, projectname)
 
 ##########################################################################################################################################
 ##########################################################################################################################################
