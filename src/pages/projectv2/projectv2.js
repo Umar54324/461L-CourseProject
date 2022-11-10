@@ -470,7 +470,7 @@ class ProjectsV2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      projectName: "N/A",
+      projectName: "Select your project from the dropdown",
     };
     // console.log(store.getState("activeUser"));
     this.onInputChange = this.onInputChange.bind(this);
