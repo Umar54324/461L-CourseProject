@@ -246,7 +246,7 @@ class Entry extends React.Component {
       if (set === "Set1") {
         //CPU
         let enteredVal = this.state.set1Val;
-        if (enteredVal > this.state.set1CheckedOut) {
+        if (Number(enteredVal) > this.state.set1CheckedOut) {
           if (
             window.confirm(
               "You asked to check in more CPU items than what you have checked out. Would you like to check in all your CPU items?"
@@ -285,7 +285,7 @@ class Entry extends React.Component {
         }
       } else {
         let enterVal = this.state.set2Val;
-        if (enterVal > this.state.set2CheckedOut) {
+        if (Number(enterVal) > this.state.set2CheckedOut) {
           if (
             window.confirm(
               "You asked to check in more GPU items than what you have checked out. Would you like to check in all your GPU items?"
@@ -327,7 +327,7 @@ class Entry extends React.Component {
       if (set === "Set1") {
         //CPU
         let enterVal = this.state.set1Val;
-        if (enterVal > this.state.cpuAvailable) {
+        if (Number(enterVal) > this.state.cpuAvailable) {
           if (
             window.confirm(
               "You asked to check out more CPU items than what is available. Would you like to check out all remaining CPU items?"
