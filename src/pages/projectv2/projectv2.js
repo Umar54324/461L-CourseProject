@@ -213,6 +213,7 @@ class Entry extends React.Component {
       set1Val: initCPUVal,
       set2Val: initGPUVal,
       proj_id: id,
+      description: desc,
     });
     // console.log(this.state.set1CheckedOut);
     // console.log(this.state.set2CheckedOut);
