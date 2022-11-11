@@ -17,7 +17,7 @@ import { activeUser } from "../login/login";
 
 async function getAllProjects(username) {
   let user = username.toString();
-  const url = "http://127.0.0.1:5000///getAllProjects/" + user;
+  const url = "/getAllProjects/" + user;
   const response = await fetch(url);
   const data = await response.json();
   // names = data;
@@ -26,40 +26,40 @@ async function getAllProjects(username) {
 async function getProjectId(username, projectName) {
   let user = username.toString();
   let proj_name = projectName.toString();
-  const url = "http://127.0.0.1:5000///getProjID/" + user + "/" + projectName;
+  const url = "/getProjID/" + user + "/" + projectName;
   const response = await fetch(url);
   const data = await response.text();
   return data;
 }
 async function getCPUCheckedOut(username, projectName) {
   let user = username.toString();
-  const url = "http://127.0.0.1:5000///getCPU/" + user + "/" + projectName;
+  const url = "/getCPU/" + user + "/" + projectName;
   const response = await fetch(url);
   const data = await response.text();
   return data;
 }
 async function getGPUCheckedOut(username, projectName) {
   let user = username.toString();
-  const url = "http://127.0.0.1:5000///getGPU/" + user + "/" + projectName;
+  const url = "/getGPU/" + user + "/" + projectName;
   const response = await fetch(url);
   const data = await response.text();
   return data;
 }
 async function getTotalCPUAvailable() {
-  const url = "http://127.0.0.1:5000///getAvailability/CPU";
+  const url = "/getAvailability/CPU";
   const response = await fetch(url);
   const data = await response.text();
   return data;
 }
 async function getTotalGPUAvailable() {
-  const url = "http://127.0.0.1:5000///getAvailability/GPU";
+  const url = "/getAvailability/GPU";
   const response = await fetch(url);
   const data = await response.text();
   return data;
 }
 async function checkInBE(username, projectName, itemName, quantity) {
   const url =
-    "http://127.0.0.1:5000///checkInUser/" +
+    "/checkInUser/" +
     username +
     "/" +
     projectName +
@@ -73,7 +73,7 @@ async function checkInBE(username, projectName, itemName, quantity) {
 }
 async function checkOutBE(username, projectName, itemName, quantity) {
   const url =
-    "http://127.0.0.1:5000///checkOutUser/" +
+    "/checkOutUser/" +
     username +
     "/" +
     projectName +
@@ -91,7 +91,7 @@ function MultipleSelectCheckmarks(props) {
   const [names, setNames] = React.useState([]);
   //getAllProjects(props.user);
   const getData = () => {
-    fetch("http://127.0.0.1:5000///getAllProjects/" + props.user)
+    fetch("/getAllProjects/" + props.user)
       .then(function (response) {
         return response.json();
       })

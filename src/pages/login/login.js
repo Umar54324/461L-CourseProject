@@ -13,7 +13,7 @@ async function verifyLogin(username, password) {
   let pass = password.toString();
   console.log(user);
   console.log(pass);
-  const url = "http://127.0.0.1:5000///verifyLogin/" + user + "/" + pass;
+  const url = "/verifyLogin/" + user + "/" + pass;
   const response = await fetch(url);
   const data = await response.text();
   console.log(data);

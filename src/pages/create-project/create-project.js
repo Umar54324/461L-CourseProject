@@ -9,14 +9,7 @@ async function createProj(origUser, project, description, owner) {
   let desc = description.toString();
   let userOwn = owner.toString();
   const url =
-    "http://127.0.0.1:5000///createProject/" +
-    user +
-    "/" +
-    proj +
-    "/" +
-    desc +
-    "/" +
-    userOwn;
+    "/createProject/" + user + "/" + proj + "/" + desc + "/" + userOwn;
   const response = await fetch(url);
   const data = await response.text();
   return data;
@@ -28,7 +21,7 @@ async function addAuthorizedUser(userToAdd, project, description, currentUser) {
   let desc = description.toString();
   let currUser = currentUser.toString();
   const url =
-    "http://127.0.0.1:5000///addAuthorizedUser/" +
+    "/addAuthorizedUser/" +
     authUser +
     "/" +
     proj_name +
