@@ -17,7 +17,7 @@ import { activeUser } from "../login/login";
 
 async function getDescription(username, projectName) {
   let user = username.toString();
-  let project = projectName.toSring();
+  let project = projectName.toString();
   const url = "/getDescription/" + user + "/" + project;
   const response = await fetch(url);
   const data = await response.text();
