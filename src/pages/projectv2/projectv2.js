@@ -15,6 +15,15 @@ import { activeUser } from "../login/login";
 
 // let names = [];
 
+async function getDescription(username, projectName) {
+  let user = username.toString();
+  let project = projectName.toSring();
+  const url = "/getDescription/" + user + "/" + project;
+  const response = await fetch(url);
+  const data = await response.text();
+  return data;
+}
+
 async function getAllProjects(username) {
   let user = username.toString();
   const url = "/getAllProjects/" + user;
@@ -167,6 +176,7 @@ class Entry extends React.Component {
       cpuAvailable: 50,
       gpuAvailable: 100,
       proj_id: 0,
+      description: "",
     };
     //this.initializeVals();
     this.initializeVals = this.initializeVals.bind(this);
@@ -187,6 +197,10 @@ class Entry extends React.Component {
       this.props.value
     );
     let id = await getProjectId(
+      localStorage.getItem("CurrentUser"),
+      this.props.value
+    );
+    let desc = await getDescription(
       localStorage.getItem("CurrentUser"),
       this.props.value
     );
@@ -430,6 +444,9 @@ class Entry extends React.Component {
         </div>
         <div className="proj-id">
           <p>ID: {this.state.proj_id}</p>
+        </div>
+        <div class="description">
+          <p>{this.state.description}</p>
         </div>
         <div className="Set1">
           <b id="b">
