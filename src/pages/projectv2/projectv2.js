@@ -15,9 +15,18 @@ import { activeUser } from "../login/login";
 
 // let names = [];
 
+async function getDescription(username, projectName) {
+  let user = username.toString();
+  let project = projectName.toString();
+  const url = "/getDescription/" + user + "/" + project;
+  const response = await fetch(url);
+  const data = await response.text();
+  return data;
+}
+
 async function getAllProjects(username) {
   let user = username.toString();
-  const url = "http://127.0.0.1:5000///getAllProjects/" + user;
+  const url = "/getAllProjects/" + user;
   const response = await fetch(url);
   const data = await response.json();
   // names = data;
@@ -26,40 +35,40 @@ async function getAllProjects(username) {
 async function getProjectId(username, projectName) {
   let user = username.toString();
   let proj_name = projectName.toString();
-  const url = "http://127.0.0.1:5000///getProjID/" + user + "/" + projectName;
+  const url = "/getProjID/" + user + "/" + projectName;
   const response = await fetch(url);
   const data = await response.text();
   return data;
 }
 async function getCPUCheckedOut(username, projectName) {
   let user = username.toString();
-  const url = "http://127.0.0.1:5000///getCPU/" + user + "/" + projectName;
+  const url = "/getCPU/" + user + "/" + projectName;
   const response = await fetch(url);
   const data = await response.text();
   return data;
 }
 async function getGPUCheckedOut(username, projectName) {
   let user = username.toString();
-  const url = "http://127.0.0.1:5000///getGPU/" + user + "/" + projectName;
+  const url = "/getGPU/" + user + "/" + projectName;
   const response = await fetch(url);
   const data = await response.text();
   return data;
 }
 async function getTotalCPUAvailable() {
-  const url = "http://127.0.0.1:5000///getAvailability/CPU";
+  const url = "/getAvailability/CPU";
   const response = await fetch(url);
   const data = await response.text();
   return data;
 }
 async function getTotalGPUAvailable() {
-  const url = "http://127.0.0.1:5000///getAvailability/GPU";
+  const url = "/getAvailability/GPU";
   const response = await fetch(url);
   const data = await response.text();
   return data;
 }
 async function checkInBE(username, projectName, itemName, quantity) {
   const url =
-    "http://127.0.0.1:5000///checkInUser/" +
+    "/checkInUser/" +
     username +
     "/" +
     projectName +
@@ -73,7 +82,7 @@ async function checkInBE(username, projectName, itemName, quantity) {
 }
 async function checkOutBE(username, projectName, itemName, quantity) {
   const url =
-    "http://127.0.0.1:5000///checkOutUser/" +
+    "/checkOutUser/" +
     username +
     "/" +
     projectName +
@@ -91,7 +100,7 @@ function MultipleSelectCheckmarks(props) {
   const [names, setNames] = React.useState([]);
   //getAllProjects(props.user);
   const getData = () => {
-    fetch("http://127.0.0.1:5000///getAllProjects/" + props.user)
+    fetch("/getAllProjects/" + props.user)
       .then(function (response) {
         return response.json();
       })
@@ -167,6 +176,7 @@ class Entry extends React.Component {
       cpuAvailable: 50,
       gpuAvailable: 100,
       proj_id: 0,
+      description: "",
     };
     //this.initializeVals();
     this.initializeVals = this.initializeVals.bind(this);
@@ -190,6 +200,10 @@ class Entry extends React.Component {
       localStorage.getItem("CurrentUser"),
       this.props.value
     );
+    let desc = await getDescription(
+      localStorage.getItem("CurrentUser"),
+      this.props.value
+    );
 
     // console.log(initCPUVal);
     // console.log(initGPUVal);
@@ -199,6 +213,7 @@ class Entry extends React.Component {
       set1Val: initCPUVal,
       set2Val: initGPUVal,
       proj_id: id,
+      description: desc,
     });
     // console.log(this.state.set1CheckedOut);
     // console.log(this.state.set2CheckedOut);
@@ -231,7 +246,7 @@ class Entry extends React.Component {
       if (set === "Set1") {
         //CPU
         let enteredVal = this.state.set1Val;
-        if (enteredVal > this.state.set1CheckedOut) {
+        if (Number(enteredVal) > this.state.set1CheckedOut) {
           if (
             window.confirm(
               "You asked to check in more CPU items than what you have checked out. Would you like to check in all your CPU items?"
@@ -270,7 +285,7 @@ class Entry extends React.Component {
         }
       } else {
         let enterVal = this.state.set2Val;
-        if (enterVal > this.state.set2CheckedOut) {
+        if (Number(enterVal) > this.state.set2CheckedOut) {
           if (
             window.confirm(
               "You asked to check in more GPU items than what you have checked out. Would you like to check in all your GPU items?"
@@ -312,7 +327,7 @@ class Entry extends React.Component {
       if (set === "Set1") {
         //CPU
         let enterVal = this.state.set1Val;
-        if (enterVal > this.state.cpuAvailable) {
+        if (Number(enterVal) > this.state.cpuAvailable) {
           if (
             window.confirm(
               "You asked to check out more CPU items than what is available. Would you like to check out all remaining CPU items?"
@@ -430,6 +445,9 @@ class Entry extends React.Component {
         </div>
         <div className="proj-id">
           <p>ID: {this.state.proj_id}</p>
+        </div>
+        <div class="description">
+          <p>{this.state.description}</p>
         </div>
         <div className="Set1">
           <b id="b">

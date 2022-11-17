@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client";
 async function registerUser(username, password) {
   let user = username.toString();
   let pass = password.toString();
-  const url = "http://127.0.0.1:5000///registerUser/" + user + "/" + pass;
+  const url = "/registerUser/" + user + "/" + pass;
   const response = await fetch(url);
   const data = await response.text();
   console.log(data);
